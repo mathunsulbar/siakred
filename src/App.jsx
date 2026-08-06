@@ -187,7 +187,7 @@ function App() {
           </span>
 
           <h1 className="mt-8 text-4xl font-bold tracking-tight md:text-5xl">
-            SIAKRED Matematika
+            SIAKRED
           </h1>
 
           <p className="mt-5 max-w-xl text-lg leading-8 text-white/80">
@@ -309,7 +309,7 @@ function App() {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 md:px-6">
           <div>
             <p className="text-xl font-bold text-slate-900">
-              SIAKRED Matematika
+              SIAKRED
             </p>
 
             <p className="text-sm text-slate-500">
