@@ -173,11 +173,11 @@ function App() {
 
             <div className="min-w-0">
               <p className="text-xs font-semibold uppercase tracking-[0.14em] text-blue-100 md:text-sm">
-                Universitas Sulawesi Barat
+                Program Studi Matematika
               </p>
 
               <p className="mt-1 text-xl font-bold leading-tight text-white md:text-2xl">
-                Program Studi Matematika
+                Universitas Sulawesi Barat
               </p>
             </div>
           </div>
