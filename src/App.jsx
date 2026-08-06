@@ -160,7 +160,7 @@ function App() {
       <main className="min-h-screen bg-slate-100 px-4 py-10">
         <div className="mx-auto grid min-h-[calc(100vh-5rem)] max-w-6xl overflow-hidden rounded-3xl bg-white shadow-xl lg:grid-cols-2">
           
-          <section className="flex flex-col justify-center bg-blue-700 p-8 text-white md:p-12">
+          <section className="flex flex-col justify-center bg-[#000080] p-8 text-white md:p-12">
           {/* Logo dan identitas universitas */}
           <div className="mb-8 flex items-center gap-5">
             <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white p-2 shadow-md">
@@ -182,7 +182,7 @@ function App() {
             </div>
           </div>
 
-          <span className="w-fit rounded-full bg-white/15 px-4 py-2 text-sm font-semibold">
+          <span className="w-fit rounded-full bg-white/20 px-4 py-2 text-sm font-semibold">
             Sistem Informasi Akreditasi Internal
           </span>
 
@@ -190,7 +190,7 @@ function App() {
             SIAKRED Matematika
           </h1>
 
-          <p className="mt-5 max-w-xl text-lg leading-8 text-blue-100">
+          <p className="mt-5 max-w-xl text-lg leading-8 text-white/80">
             Platform pengelolaan data penelitian, pengabdian kepada
             masyarakat, publikasi, luaran, indikator kinerja, dan siklus
             PPEPP Program Studi Matematika Universitas Sulawesi Barat.
@@ -214,7 +214,7 @@ function App() {
           <section className="flex items-center p-8 md:p-12">
             <div className="w-full">
               <div className="mb-8">
-                <p className="text-sm font-semibold uppercase tracking-wider text-blue-600">
+                <p className="text-sm font-semibold uppercase tracking-wider text-[#000080]">
                   Akses pengguna
                 </p>
 
@@ -248,7 +248,7 @@ function App() {
                     }
                     placeholder="sample@unsulbar.ac.id"
                     autoComplete="email"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
+                    className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-[#000080] focus:ring-4 focus:ring-indigo-100"
                   />
                 </div>
 
@@ -269,7 +269,7 @@ function App() {
                     }
                     placeholder="Masukkan kata sandi"
                     autoComplete="current-password"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
+                    className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-[#000080] focus:ring-4 focus:ring-indigo-100"
                   />
                 </div>
 
@@ -282,7 +282,7 @@ function App() {
                 <button
                   type="submit"
                   disabled={loginLoading}
-                  className="w-full rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-blue-300"
+                  className="w-full rounded-xl bg-[#000080] px-5 py-3 font-semibold text-white transition hover:bg-[#000066] disabled:cursor-not-allowed disabled:bg-slate-400"
                 >
                   {loginLoading
                     ? "Sedang masuk..."
