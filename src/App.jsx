@@ -159,35 +159,57 @@ function App() {
     return (
       <main className="min-h-screen bg-slate-100 px-4 py-10">
         <div className="mx-auto grid min-h-[calc(100vh-5rem)] max-w-6xl overflow-hidden rounded-3xl bg-white shadow-xl lg:grid-cols-2">
+          
           <section className="flex flex-col justify-center bg-blue-700 p-8 text-white md:p-12">
-            <span className="w-fit rounded-full bg-white/15 px-4 py-2 text-sm font-semibold">
-              Sistem Penjaminan Mutu Internal
-            </span>
-
-            <h1 className="mt-8 text-4xl font-bold tracking-tight md:text-5xl">
-              SIAKRED Matematika
-            </h1>
-
-            <p className="mt-5 max-w-xl text-lg leading-8 text-blue-100">
-              Sistem Informasi Manajemen Akreditasi Internal untuk
-              mengelola penelitian, pengabdian kepada masyarakat,
-              IKU, IKT, dan siklus PPEPP.
-            </p>
-
-            <div className="mt-10 grid gap-3 text-sm text-blue-50">
-              <div className="rounded-xl bg-white/10 p-4">
-                Pengelolaan penelitian dan PkM
-              </div>
-
-              <div className="rounded-xl bg-white/10 p-4">
-                Verifikasi bukti oleh Tim GPM
-              </div>
-
-              <div className="rounded-xl bg-white/10 p-4">
-                Pemantauan capaian IKU, IKT, dan PPEPP
-              </div>
+          {/* Logo dan identitas universitas */}
+          <div className="mb-8 flex items-center gap-5">
+            <div className="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-[#ffffff] p-3 shadow-md">
+              <img
+                src="/logo-unsulbar.png"
+                alt="Logo Universitas Sulawesi Barat"
+                className="h-full w-full bg-[#ffffff] object-contain"
+              />
             </div>
-          </section>
+
+            <div className="min-w-0">
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-blue-100 md:text-sm">
+                Universitas Sulawesi Barat
+              </p>
+
+              <p className="mt-1 text-xl font-bold leading-tight text-white md:text-2xl">
+                Program Studi Matematika
+              </p>
+            </div>
+          </div>
+
+          <span className="w-fit rounded-full bg-white/15 px-4 py-2 text-sm font-semibold">
+            Sistem Informasi Akreditasi Internal
+          </span>
+
+          <h1 className="mt-8 text-4xl font-bold tracking-tight md:text-5xl">
+            SIAKRED Matematika
+          </h1>
+
+          <p className="mt-5 max-w-xl text-lg leading-8 text-blue-100">
+            Platform pengelolaan data penelitian, pengabdian kepada
+            masyarakat, publikasi, luaran, indikator kinerja, dan siklus
+            PPEPP Program Studi Matematika Universitas Sulawesi Barat.
+          </p>
+
+          <div className="mt-10 grid gap-3 text-sm text-blue-50">
+            <div className="rounded-xl border border-white/10 bg-white/10 p-4">
+              Pengelolaan penelitian dan pengabdian kepada masyarakat
+            </div>
+
+            <div className="rounded-xl border border-white/10 bg-white/10 p-4">
+              Pengelolaan publikasi dan luaran dosen
+            </div>
+
+            <div className="rounded-xl border border-white/10 bg-white/10 p-4">
+              Verifikasi bukti dan pemantauan capaian PPEPP
+            </div>
+          </div>
+        </section>
 
           <section className="flex items-center p-8 md:p-12">
             <div className="w-full">
@@ -201,7 +223,7 @@ function App() {
                 </h2>
 
                 <p className="mt-2 text-slate-600">
-                  Gunakan akun yang telah dibuat pada Supabase.
+                  Masukkan email dan kata sandi akun SIAKRED Anda.
                 </p>
               </div>
 
@@ -224,7 +246,7 @@ function App() {
                     onChange={(event) =>
                       setEmail(event.target.value)
                     }
-                    placeholder="gpm.matematika@kampus.ac.id"
+                    placeholder="sample@unsulbar.ac.id"
                     autoComplete="email"
                     className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
                   />
@@ -269,8 +291,10 @@ function App() {
               </form>
 
               <p className="mt-6 text-center text-xs leading-5 text-slate-500">
-                Akun pengguna dikelola oleh administrator SIAKRED
-                Program Studi Matematika.
+                Akun pengguna dikelola oleh administrator Program Studi Matematika
+                <span className="mt-1 block">
+                  Universitas Sulawesi Barat.
+                </span>
               </p>
             </div>
           </section>
