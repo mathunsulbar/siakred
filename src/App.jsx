@@ -163,11 +163,11 @@ function App() {
           <section className="flex flex-col justify-center bg-blue-700 p-8 text-white md:p-12">
           {/* Logo dan identitas universitas */}
           <div className="mb-8 flex items-center gap-5">
-            <div className="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-[#ffffff] p-3 shadow-md">
+            <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white p-2 shadow-md">
               <img
                 src="/logo-unsulbar.png"
                 alt="Logo Universitas Sulawesi Barat"
-                className="h-full w-full bg-[#ffffff] object-contain"
+                className="h-full w-full bg-white object-contain"
               />
             </div>
 
