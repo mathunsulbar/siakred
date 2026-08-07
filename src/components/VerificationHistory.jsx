@@ -375,7 +375,7 @@ function VerificationHistory() {
                   </td>
 
                   <td className="px-3 py-4">
-                    <span className="inline-flex rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
+                    <span className="inline-flex rounded-full border border-[#000080]/20 bg-[#000080]/5 px-3 py-1 text-xs font-semibold text-[#000080]">
                       {getSourceLabel(log.sumber_data)}
                     </span>
                   </td>

@@ -679,7 +679,7 @@ function GpmDashboard() {
                   </td>
 
                   <td className="px-3 py-4">
-                    <span className="inline-flex rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
+                    <span className="inline-flex rounded-full border border-[#000080]/20 bg-[#000080]/5 px-3 py-1 text-xs font-semibold text-[#000080]">
                       {item.sourceLabel}
                     </span>
 
@@ -784,7 +784,7 @@ function GpmDashboard() {
                                 disabled={
                                 openingFile === item.dokumenBuktiPath
                                 }
-                                className="rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-100 disabled:opacity-50"
+                                className="rounded-lg border border-[#000080]/20 bg-[#000080]/5 px-3 py-2 text-sm font-semibold text-[#000080] hover:bg-blue-100 disabled:opacity-50"
                             >
                                 {openingFile === item.dokumenBuktiPath
                                 ? "Membuka..."

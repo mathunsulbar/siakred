@@ -1129,7 +1129,7 @@ function SatgasDashboard() {
           type="button"
           onClick={loadData}
           disabled={loading}
-          className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+         className="rounded-lg border border-[#000080] bg-white px-4 py-2 text-sm font-semibold text-[#000080] transition hover:bg-[#000080]/5 disabled:opacity-50"
         >
           {loading ? "Memuat..." : "Perbarui data"}
         </button>
@@ -1262,21 +1262,21 @@ function SatgasDashboard() {
         </p>
 
         <div className="flex flex-wrap gap-3">
-            <button
+          <button
             type="button"
             onClick={exportCsv}
-            className="rounded-lg bg-green-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-green-700"
-            >
+            className="rounded-lg bg-[#000080] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#000066]"
+          >
             Ekspor CSV
-            </button>
+          </button>
 
-            <button
+          <button
             type="button"
             onClick={exportPdf}
-            className="rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-700"
-            >
+            className="rounded-lg border border-[#000080] bg-white px-4 py-2 text-sm font-semibold text-[#000080] transition hover:bg-[#000080]/5"
+          >
             Ekspor PDF
-            </button>
+          </button>
         </div>
         </div>
       </div>
@@ -1438,7 +1438,7 @@ function SatgasDashboard() {
 
                     {/* Jenis kegiatan */}
                     <td className="min-w-[190px] px-3 py-4">
-                        <span className="inline-flex rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
+                        <span className="inline-flex rounded-full border border-[#000080]/20 bg-[#000080]/5 px-3 py-1 text-xs font-semibold text-[#000080]">
                         {item.category || "-"}
                         </span>
                     </td>
@@ -1518,7 +1518,7 @@ function SatgasDashboard() {
                             href={item.linkBukti}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex whitespace-nowrap rounded-lg border border-violet-200 bg-violet-50 px-3 py-2 font-semibold text-violet-700 hover:bg-violet-100"
+                            className="inline-flex whitespace-nowrap rounded-lg border border-[#000080]/20 bg-[#000080]/5 px-3 py-2 font-semibold text-[#000080] transition hover:bg-[#000080]/10"
                         >
                             Buka Bukti
                         </a>
@@ -1622,8 +1622,8 @@ function SummaryCard({
   compact = false,
 }) {
   return (
-    <article className="rounded-2xl bg-white p-5 shadow-sm">
-      <p className="text-sm font-medium text-slate-500">
+    <article className="rounded-2xl border border-[#000080]/10 bg-white p-5 shadow-sm">
+      <p className="text-sm font-semibold text-[#000080]">
         {title}
       </p>
 
@@ -1660,7 +1660,7 @@ function TableHeading({
 
   return (
     <th
-      className={`px-2 py-3 text-xs font-semibold text-slate-600 ${
+      className={`bg-[#000080] px-3 py-3 text-xs font-semibold text-white first:rounded-l-lg last:rounded-r-lg ${
         align === "right"
           ? "text-right"
           : "text-left"
@@ -1669,7 +1669,7 @@ function TableHeading({
       <button
         type="button"
         onClick={() => onSort(sortKey)}
-        className={`flex w-full items-center gap-1 transition hover:text-blue-700 ${
+        className={`flex w-full items-center gap-1 text-white transition hover:text-white ${
           align === "right"
             ? "justify-end text-right"
             : "justify-start text-left"
@@ -1681,8 +1681,8 @@ function TableHeading({
         <span
           className={
             isActive
-              ? "text-blue-600"
-              : "text-slate-300"
+              ? "text-white"
+              : "text-white/60"
           }
         >
           {sortSymbol}
@@ -1753,7 +1753,7 @@ function escapeCsvValue(value) {
 }
 
 const inputClassName =
-  "w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-blue-600 focus:ring-4 focus:ring-blue-100";
+  "w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-[#000080] focus:ring-4 focus:ring-[#000080]/10";
 
 
 function formatPeopleData(

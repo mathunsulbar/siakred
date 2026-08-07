@@ -148,7 +148,7 @@ function App() {
       <main className="flex min-h-screen items-center justify-center bg-slate-100">
         <div className="rounded-xl bg-white px-8 py-6 shadow">
           <p className="font-medium text-slate-700">
-            Memuat SIAKRED...
+            Memuat SIAKREDI...
           </p>
         </div>
       </main>
@@ -187,7 +187,7 @@ function App() {
           </span>
 
           <h1 className="mt-8 text-4xl font-bold tracking-tight md:text-5xl">
-            SIAKRED
+            SIAKREDI
           </h1>
 
           <p className="mt-5 max-w-xl text-lg leading-8 text-white/80">
@@ -223,7 +223,7 @@ function App() {
                 </h2>
 
                 <p className="mt-2 text-slate-600">
-                  Masukkan email dan kata sandi akun SIAKRED Anda.
+                  Masukkan email dan kata sandi akun SIAKREDI Anda.
                 </p>
               </div>
 
@@ -286,7 +286,7 @@ function App() {
                 >
                   {loginLoading
                     ? "Sedang masuk..."
-                    : "Masuk ke SIAKRED"}
+                    : "Masuk ke SIAKREDI"}
                 </button>
               </form>
 
@@ -309,7 +309,7 @@ function App() {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 md:px-6">
           <div>
             <p className="text-xl font-bold text-slate-900">
-              SIAKRED
+              SIAKREDI
             </p>
 
             <p className="text-sm text-slate-500">
@@ -335,7 +335,7 @@ function App() {
         )}
 
         <section className="rounded-2xl bg-white p-6 shadow-sm">
-          <p className="text-sm font-semibold uppercase tracking-wider text-blue-600">
+          <p className="text-sm font-semibold uppercase tracking-wider text-[#000080]">
             Selamat datang
           </p>
 
@@ -370,7 +370,7 @@ function App() {
                 Hak akses
               </p>
 
-              <p className="mt-1 font-semibold text-blue-700">
+              <p className="mt-1 font-semibold text-[#000080]">
                 {getRoleLabel(profile?.app_role)}
               </p>
             </div>
