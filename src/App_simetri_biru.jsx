@@ -160,7 +160,7 @@ function App() {
       <main className="min-h-screen bg-slate-100 px-4 py-10">
         <div className="mx-auto grid min-h-[calc(100vh-5rem)] max-w-6xl overflow-hidden rounded-3xl bg-white shadow-xl lg:grid-cols-2">
           
-          <section className="flex flex-col justify-center bg-gradient-to-r from-[#C5163A] via-[#8F1024] to-[#5B000A] p-8 text-white md:p-12">
+          <section className="flex flex-col justify-center bg-[#000080] p-8 text-white md:p-12">
           {/* Logo dan identitas universitas */}
           <div className="mb-8 flex items-center gap-5">
             <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white p-2 shadow-md">
@@ -172,7 +172,7 @@ function App() {
             </div>
 
             <div className="min-w-0">
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-rose-100 md:text-sm">
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-blue-100 md:text-sm">
                 Program Studi Matematika
               </p>
 
@@ -197,7 +197,7 @@ function App() {
             Matematika Universitas Sulawesi Barat.
           </p>
 
-          <div className="mt-10 grid gap-3 text-sm text-rose-50">
+          <div className="mt-10 grid gap-3 text-sm text-blue-50">
             <div className="rounded-xl border border-white/10 bg-white/10 p-4">
               Pengelolaan penelitian dan pengabdian kepada masyarakat
             </div>
@@ -215,7 +215,7 @@ function App() {
           <section className="flex items-center p-8 md:p-12">
             <div className="w-full">
               <div className="mb-8">
-                <p className="text-sm font-semibold uppercase tracking-wider text-[#881337]">
+                <p className="text-sm font-semibold uppercase tracking-wider text-[#000080]">
                   Akses pengguna
                 </p>
 
@@ -249,7 +249,7 @@ function App() {
                     }
                     placeholder="sample@unsulbar.ac.id"
                     autoComplete="email"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-[#881337] focus:ring-4 focus:ring-[#FFE4E6]"
+                    className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-[#000080] focus:ring-4 focus:ring-indigo-100"
                   />
                 </div>
 
@@ -270,7 +270,7 @@ function App() {
                     }
                     placeholder="Masukkan kata sandi"
                     autoComplete="current-password"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-[#881337] focus:ring-4 focus:ring-[#FFE4E6]"
+                    className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-[#000080] focus:ring-4 focus:ring-indigo-100"
                   />
                 </div>
 
@@ -283,7 +283,7 @@ function App() {
                 <button
                   type="submit"
                   disabled={loginLoading}
-                  className="w-full rounded-xl bg-gradient-to-r from-[#C5163A] via-[#8F1024] to-[#5B000A] px-5 py-3 font-semibold text-white shadow-md transition hover:brightness-95 disabled:cursor-not-allowed disabled:bg-slate-400 disabled:bg-none"
+                  className="w-full rounded-xl bg-[#000080] px-5 py-3 font-semibold text-white transition hover:bg-[#000066] disabled:cursor-not-allowed disabled:bg-slate-400"
                 >
                   {loginLoading
                     ? "Sedang masuk..."
@@ -336,7 +336,7 @@ function App() {
         )}
 
         <section className="rounded-2xl bg-white p-6 shadow-sm">
-          <p className="text-sm font-semibold uppercase tracking-wider text-[#881337]">
+          <p className="text-sm font-semibold uppercase tracking-wider text-[#000080]">
             Selamat datang
           </p>
 
@@ -371,7 +371,7 @@ function App() {
                 Hak akses
               </p>
 
-              <p className="mt-1 font-semibold text-[#881337]">
+              <p className="mt-1 font-semibold text-[#000080]">
                 {getRoleLabel(profile?.app_role)}
               </p>
             </div>

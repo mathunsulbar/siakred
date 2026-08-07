@@ -1337,19 +1337,12 @@ try {
       <div className="rounded-2xl border border-blue-100 bg-white p-6 shadow-sm">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-blue-600">
-              Import massal
-            </p>
-
             <h3 className="mt-1 text-xl font-bold text-slate-900">
               Import Data Kegiatan dari Excel
             </h3>
 
             <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">
-              Gunakan template agar banyak kegiatan dapat
-              dimasukkan sekaligus. Dokumen bukti tambahan
-              tidak diunggah melalui Excel, sedangkan Link
-              Bukti tetap wajib diisi.
+              Gunakan template untuk data kolektif dan data individu.
             </p>
           </div>
 
@@ -1366,7 +1359,7 @@ try {
               className={`cursor-pointer rounded-xl px-4 py-3 text-sm font-semibold text-white transition ${
                 editingId || importing
                   ? "cursor-not-allowed bg-blue-300"
-                  : "bg-gradient-to-r from-[#C5163A] via-[#8F1024] to-[#5B000A] hover:brightness-95 shadow-sm"
+                  : "bg-blue-600 hover:bg-blue-700"
               }`}
             >
               Pilih File Excel
@@ -1446,7 +1439,7 @@ try {
                   disabled={
                     importing || validImportCount === 0
                   }
-                  className="rounded-xl bg-gradient-to-r from-[#C5163A] via-[#8F1024] to-[#5B000A] px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:brightness-95 disabled:cursor-not-allowed disabled:bg-[#FDA4AF] disabled:bg-none"
+                  className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-blue-300"
                 >
                   {importing
                     ? "Menyimpan data..."
@@ -1783,7 +1776,7 @@ try {
         <button
         type="button"
         onClick={addAnggotaDosen}
-        className="rounded-lg border border-[#FECDD3] bg-[#FFF1F2] px-3 py-2 text-sm font-semibold text-[#881337] hover:bg-[#FFE4E6]"
+        className="rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-100"
         >
         + Tambah Anggota
         </button>
@@ -1860,7 +1853,7 @@ try {
         <button
         type="button"
         onClick={addMahasiswa}
-        className="rounded-lg border border-[#FECDD3] bg-[#FFF1F2] px-3 py-2 text-sm font-semibold text-[#881337] hover:bg-[#FFE4E6]"
+        className="rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-100"
         >
         + Tambah Mahasiswa
         </button>
@@ -2037,7 +2030,7 @@ try {
                 type="file"
                 accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx"
                 onChange={handleFileChange}
-                className="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-700 file:mr-4 file:rounded-lg file:border-0 file:bg-[#FFF1F2] file:px-4 file:py-2 file:font-semibold file:text-[#881337] hover:file:bg-[#FFE4E6]"
+                className="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-700 file:mr-4 file:rounded-lg file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:font-semibold file:text-blue-700 hover:file:bg-blue-100"
               />
 
               <p className="mt-2 text-xs text-slate-500">
@@ -2046,7 +2039,7 @@ try {
               </p>
 
               {evidenceFile && (
-                <div className="mt-3 rounded-lg border border-[#FECDD3] bg-[#FFF1F2] p-3 text-sm text-[#881337]">
+                <div className="mt-3 rounded-lg border border-blue-200 bg-blue-50 p-3 text-sm text-blue-700">
                   File baru: {evidenceFile.name}
                 </div>
               )}
@@ -2090,7 +2083,7 @@ try {
             <button
               type="submit"
               disabled={saving}
-              className="rounded-xl bg-gradient-to-r from-[#C5163A] via-[#8F1024] to-[#5B000A] px-6 py-3 font-semibold text-white shadow-md transition hover:brightness-95 disabled:cursor-not-allowed disabled:bg-[#FDA4AF] disabled:bg-none"
+              className="rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-blue-300"
             >
               {saving
                 ? "Mengunggah dan menyimpan..."
@@ -2214,7 +2207,7 @@ try {
                             disabled={
                             openingFile === activity.dokumen_bukti_path
                             }
-                            className="rounded-lg border border-[#FECDD3] bg-[#FFF1F2] px-3 py-2 text-sm font-semibold text-[#881337] hover:bg-[#FFE4E6] disabled:opacity-50"
+                            className="rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-100 disabled:opacity-50"
                         >
                             {openingFile === activity.dokumen_bukti_path
                             ? "Membuka..."
@@ -2367,7 +2360,7 @@ function StatusBadge({ status }) {
 }
 
 const inputClassName =
-  "w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-[#881337] focus:ring-4 focus:ring-[#FFE4E6]";
+  "w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-600 focus:ring-4 focus:ring-blue-100";
 
 function findExcelValue(row, possibleHeaders) {
   const normalizedHeaders = possibleHeaders.map(

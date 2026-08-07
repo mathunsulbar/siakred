@@ -951,7 +951,7 @@ function SatgasDashboard() {
                 },
 
                 headStyles: {
-                fillColor: [136, 19, 55],
+                fillColor: [0, 0, 128],
                 textColor: [255, 255, 255],
                 fontStyle: "bold",
                 fontSize: 8.5,
@@ -1021,7 +1021,7 @@ function SatgasDashboard() {
                 9: {
                     cellWidth: 22,
                     halign: "center",
-                    textColor: [136, 19, 55],
+                    textColor: [0, 0, 128],
                     fontStyle: "bold",
                 },
 
@@ -1153,7 +1153,7 @@ function SatgasDashboard() {
           type="button"
           onClick={loadData}
           disabled={loading}
-         className="rounded-lg border border-[#881337] bg-white px-4 py-2 text-sm font-semibold text-[#881337] transition hover:bg-[#881337]/5 disabled:opacity-50"
+         className="rounded-lg border border-[#000080] bg-white px-4 py-2 text-sm font-semibold text-[#000080] transition hover:bg-[#000080]/5 disabled:opacity-50"
         >
           {loading ? "Memuat..." : "Perbarui data"}
         </button>
@@ -1289,7 +1289,7 @@ function SatgasDashboard() {
           <button
             type="button"
             onClick={exportCsv}
-            className="rounded-lg bg-gradient-to-r from-[#C5163A] via-[#8F1024] to-[#5B000A] px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:brightness-95"
+            className="rounded-lg bg-[#000080] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#000066]"
           >
             Ekspor CSV
           </button>
@@ -1297,7 +1297,7 @@ function SatgasDashboard() {
           <button
             type="button"
             onClick={exportPdf}
-            className="rounded-lg border border-[#881337] bg-white px-4 py-2 text-sm font-semibold text-[#881337] transition hover:bg-[#881337]/5"
+            className="rounded-lg border border-[#000080] bg-white px-4 py-2 text-sm font-semibold text-[#000080] transition hover:bg-[#000080]/5"
           >
             Ekspor PDF
           </button>
@@ -1462,7 +1462,7 @@ function SatgasDashboard() {
 
                     {/* Jenis kegiatan */}
                     <td className="min-w-[190px] px-3 py-4">
-                        <span className="inline-flex rounded-full border border-[#881337]/20 bg-[#881337]/5 px-3 py-1 text-xs font-semibold text-[#881337]">
+                        <span className="inline-flex rounded-full border border-[#000080]/20 bg-[#000080]/5 px-3 py-1 text-xs font-semibold text-[#000080]">
                         {item.category || "-"}
                         </span>
                     </td>
@@ -1542,7 +1542,7 @@ function SatgasDashboard() {
                             href={item.linkBukti}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex whitespace-nowrap rounded-lg border border-[#881337]/20 bg-[#881337]/5 px-3 py-2 font-semibold text-[#881337] transition hover:bg-[#881337]/10"
+                            className="inline-flex whitespace-nowrap rounded-lg border border-[#000080]/20 bg-[#000080]/5 px-3 py-2 font-semibold text-[#000080] transition hover:bg-[#000080]/10"
                         >
                             Buka Bukti
                         </a>
@@ -1644,8 +1644,8 @@ function SummaryCard({
   compact = false,
 }) {
   return (
-    <article className="rounded-2xl border border-[#881337]/10 bg-white p-5 shadow-sm">
-      <p className="text-sm font-semibold text-[#881337]">
+    <article className="rounded-2xl border border-[#000080]/10 bg-white p-5 shadow-sm">
+      <p className="text-sm font-semibold text-[#000080]">
         {title}
       </p>
 
@@ -1682,7 +1682,7 @@ function TableHeading({
 
   return (
     <th
-      className={`bg-[#881337] px-3 py-3 text-xs font-semibold text-white first:rounded-l-lg last:rounded-r-lg ${
+      className={`bg-[#000080] px-3 py-3 text-xs font-semibold text-white first:rounded-l-lg last:rounded-r-lg ${
         align === "right"
           ? "text-right"
           : "text-left"
@@ -1775,7 +1775,7 @@ function escapeCsvValue(value) {
 }
 
 const inputClassName =
-  "w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-[#881337] focus:ring-4 focus:ring-[#881337]/10";
+  "w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-[#000080] focus:ring-4 focus:ring-[#000080]/10";
 
 
 function formatPeopleData(

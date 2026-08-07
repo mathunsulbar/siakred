@@ -1374,7 +1374,7 @@ function LuaranDashboard({ userId }) {
         </p>
       </div>
 
-      <div className="rounded-2xl border border-[#881337]/10 bg-white p-6 shadow-sm">
+      <div className="rounded-2xl border border-[#000080]/10 bg-white p-6 shadow-sm">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div>
             <h3 className="mt-1 text-xl font-bold text-slate-900">
@@ -1399,7 +1399,7 @@ function LuaranDashboard({ userId }) {
               className={`cursor-pointer rounded-xl px-4 py-3 text-sm font-semibold text-white transition ${
                 editingId || importing
                   ? "cursor-not-allowed bg-slate-400"
-                  : "bg-gradient-to-r from-[#C5163A] via-[#8F1024] to-[#5B000A] hover:brightness-95 shadow-sm"
+                  : "bg-[#000080] hover:bg-[#000066]"
               }`}
             >
               Pilih File Excel
@@ -1479,7 +1479,7 @@ function LuaranDashboard({ userId }) {
                   disabled={
                     importing || validImportCount === 0
                   }
-                  className="rounded-xl bg-gradient-to-r from-[#C5163A] via-[#8F1024] to-[#5B000A] px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:brightness-95 disabled:cursor-not-allowed disabled:bg-slate-400 disabled:bg-none"
+                  className="rounded-xl bg-[#000080] px-4 py-2 text-sm font-semibold text-white hover:bg-[#000066] disabled:cursor-not-allowed disabled:bg-slate-400"
                 >
                   {importing
                     ? "Menyimpan data..."
@@ -1831,7 +1831,7 @@ function LuaranDashboard({ userId }) {
               <button
                 type="button"
                 onClick={addAnggotaDosen}
-                className="rounded-lg border border-[#881337]/20 bg-[#881337]/5 px-3 py-2 text-sm font-semibold text-[#881337] hover:bg-[#881337]/10"
+                className="rounded-lg border border-[#000080]/20 bg-[#000080]/5 px-3 py-2 text-sm font-semibold text-[#000080] hover:bg-[#000080]/10"
               >
                 + Tambah Anggota
               </button>
@@ -1908,7 +1908,7 @@ function LuaranDashboard({ userId }) {
               <button
                 type="button"
                 onClick={addMahasiswa}
-                className="rounded-lg border border-[#881337]/20 bg-[#881337]/5 px-3 py-2 text-sm font-semibold text-[#881337] hover:bg-[#881337]/10"
+                className="rounded-lg border border-[#000080]/20 bg-[#000080]/5 px-3 py-2 text-sm font-semibold text-[#000080] hover:bg-[#000080]/10"
               >
                 + Tambah Mahasiswa
               </button>
@@ -2138,7 +2138,7 @@ function LuaranDashboard({ userId }) {
                 type="file"
                 accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx"
                 onChange={handleFileChange}
-                className="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-700 file:mr-4 file:rounded-lg file:border-0 file:bg-[#881337]/5 file:px-4 file:py-2 file:font-semibold file:text-[#881337] hover:file:bg-[#881337]/10"
+                className="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-700 file:mr-4 file:rounded-lg file:border-0 file:bg-[#000080]/5 file:px-4 file:py-2 file:font-semibold file:text-[#000080] hover:file:bg-[#000080]/10"
               />
 
               <p className="mt-2 text-xs text-slate-500">
@@ -2147,7 +2147,7 @@ function LuaranDashboard({ userId }) {
               </p>
 
               {evidenceFile && (
-                <div className="mt-3 rounded-lg border border-[#881337]/20 bg-[#881337]/5 p-3 text-sm text-[#881337]">
+                <div className="mt-3 rounded-lg border border-[#000080]/20 bg-[#000080]/5 p-3 text-sm text-[#000080]">
                   File baru: {evidenceFile.name}
                 </div>
               )}
@@ -2191,7 +2191,7 @@ function LuaranDashboard({ userId }) {
             <button
               type="submit"
               disabled={saving}
-              className="rounded-xl bg-gradient-to-r from-[#C5163A] via-[#8F1024] to-[#5B000A] px-6 py-3 font-semibold text-white shadow-md transition hover:brightness-95 disabled:cursor-not-allowed disabled:bg-slate-400 disabled:bg-none"
+              className="rounded-xl bg-[#000080] px-6 py-3 font-semibold text-white hover:bg-[#000066] disabled:cursor-not-allowed disabled:bg-slate-400"
             >
               {saving
                 ? "Mengunggah dan menyimpan..."
@@ -2390,7 +2390,7 @@ function OutputHistory({
                         disabled={
                         openingFile === output.dokumen_bukti_path
                         }
-                        className="rounded-lg border border-[#FECDD3] bg-[#FFF1F2] px-3 py-2 text-sm font-semibold text-[#881337] hover:bg-[#FFE4E6] disabled:cursor-not-allowed disabled:opacity-50"
+                        className="rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-100 disabled:cursor-not-allowed disabled:opacity-50"
                     >
                         {openingFile === output.dokumen_bukti_path
                         ? "Membuka..."
@@ -2532,7 +2532,7 @@ function StatusBadge({ status }) {
 }
 
 const inputClassName =
-  "w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-[#881337] focus:ring-4 focus:ring-[#881337]/10";
+  "w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-[#000080] focus:ring-4 focus:ring-[#000080]/10";
 
 function onlyDigits(value) {
   return String(value ?? "").replace(/\D/g, "");
