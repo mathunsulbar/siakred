@@ -18,8 +18,8 @@ function GpmWorkspace({ userId }) {
             }
             className={`rounded-xl px-4 py-3 text-sm font-semibold transition ${
               activeTab === "verifikasi"
-                ? "bg-gradient-to-r from-[#C5163A] via-[#8F1024] to-[#5B000A] text-white shadow-sm"
-                : "text-slate-600 hover:bg-[#FFF1F2] hover:text-[#881337]"
+                ? "bg-[#000080] text-white"
+                : "text-slate-600 hover:bg-slate-100"
             }`}
           >
             Verifikasi Dokumen
@@ -32,8 +32,8 @@ function GpmWorkspace({ userId }) {
             }
             className={`rounded-xl px-4 py-3 text-sm font-semibold transition ${
               activeTab === "ppepp"
-                ? "bg-gradient-to-r from-[#C5163A] via-[#8F1024] to-[#5B000A] text-white shadow-sm"
-                : "text-slate-600 hover:bg-[#FFF1F2] hover:text-[#881337]"
+                ? "bg-[#000080] text-white"
+                : "text-slate-600 hover:bg-slate-100"
             }`}
           >
             Siklus PPEPP
@@ -44,8 +44,8 @@ function GpmWorkspace({ userId }) {
             onClick={() => setActiveTab("riwayat")}
             className={`rounded-xl px-4 py-3 text-sm font-semibold transition ${
               activeTab === "riwayat"
-                ? "bg-gradient-to-r from-[#C5163A] via-[#8F1024] to-[#5B000A] text-white shadow-sm"
-                : "text-slate-600 hover:bg-[#FFF1F2] hover:text-[#881337]"
+                ? "bg-[#000080] text-white"
+                : "text-slate-600 hover:bg-slate-100"
             }`}
           >
             Riwayat Verifikasi

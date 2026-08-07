@@ -191,10 +191,9 @@ function App() {
           </h1>
 
           <p className="mt-5 max-w-xl text-lg leading-8 text-white/80">
-            Sistem monitoring, evaluasi, tata kelola, dan repositori internal
-            untuk data penelitian, pengabdian kepada masyarakat, luaran
-            publikasi dan siklus PPEPP Program Studi Matematika Universitas
-            Sulawesi Barat.
+            Platform monitoring, evaluasi, tata kelola, dan repositori internal
+            untuk data penelitian, pengabdian kepada masyarakat, publikasi, 
+            serta siklus PPEPP Program Studi Matematika Universitas Sulawesi Barat.
           </p>
 
           <div className="mt-10 grid gap-3 text-sm text-rose-50">
@@ -338,43 +337,43 @@ function App() {
           </div>
         )}
 
-        <section className="rounded-2xl bg-gradient-to-r from-[#C5163A] via-[#8F1024] to-[#5B000A] p-6 text-white shadow-sm">
-          <p className="text-sm font-semibold uppercase tracking-wider text-white/90">
+        <section className="rounded-2xl bg-white p-6 shadow-sm">
+          <p className="text-sm font-semibold uppercase tracking-wider text-[#881337]">
             Selamat datang
           </p>
 
-          <h1 className="mt-2 text-3xl font-bold text-white">
+          <h1 className="mt-2 text-3xl font-bold text-slate-900">
             {profile?.nama_lengkap ||
               session.user.email}
           </h1>
 
           <div className="mt-6 grid gap-4 md:grid-cols-3">
-            <div className="rounded-xl border border-white/20 bg-white/10 p-4 backdrop-blur-sm">
-              <p className="text-sm text-white/75">
+            <div className="rounded-xl border border-slate-200 p-4">
+              <p className="text-sm text-slate-500">
                 Email
               </p>
 
-              <p className="mt-1 font-semibold text-white">
+              <p className="mt-1 font-semibold text-slate-900">
                 {session.user.email}
               </p>
             </div>
 
-            <div className="rounded-xl border border-white/20 bg-white/10 p-4 backdrop-blur-sm">
-              <p className="text-sm text-white/75">
+            <div className="rounded-xl border border-slate-200 p-4">
+              <p className="text-sm text-slate-500">
                 Program studi
               </p>
 
-              <p className="mt-1 font-semibold text-white">
+              <p className="mt-1 font-semibold text-slate-900">
                 {profile?.program_studi || "Matematika"}
               </p>
             </div>
 
-            <div className="rounded-xl border border-white/20 bg-white/10 p-4 backdrop-blur-sm">
-              <p className="text-sm text-white/75">
+            <div className="rounded-xl border border-slate-200 p-4">
+              <p className="text-sm text-slate-500">
                 Hak akses
               </p>
 
-              <p className="mt-1 font-semibold text-white">
+              <p className="mt-1 font-semibold text-[#881337]">
                 {getRoleLabel(profile?.app_role)}
               </p>
             </div>

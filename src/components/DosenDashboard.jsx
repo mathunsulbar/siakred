@@ -1334,22 +1334,15 @@ try {
         </p>
       </div>
 
-      <div className="rounded-2xl border border-blue-100 bg-white p-6 shadow-sm">
+      <div className="rounded-2xl border border-[#881337]/10 bg-white p-6 shadow-sm">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-blue-600">
-              Import massal
-            </p>
-
             <h3 className="mt-1 text-xl font-bold text-slate-900">
               Import Data Kegiatan dari Excel
             </h3>
 
             <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">
-              Gunakan template agar banyak kegiatan dapat
-              dimasukkan sekaligus. Dokumen bukti tambahan
-              tidak diunggah melalui Excel, sedangkan Link
-              Bukti tetap wajib diisi.
+              Gunakan template untuk data kolektif dan data individu.
             </p>
           </div>
 
@@ -1365,7 +1358,7 @@ try {
             <label
               className={`cursor-pointer rounded-xl px-4 py-3 text-sm font-semibold text-white transition ${
                 editingId || importing
-                  ? "cursor-not-allowed bg-blue-300"
+                  ? "cursor-not-allowed bg-[#FDA4AF]"
                   : "bg-gradient-to-r from-[#C5163A] via-[#8F1024] to-[#5B000A] hover:brightness-95 shadow-sm"
               }`}
             >

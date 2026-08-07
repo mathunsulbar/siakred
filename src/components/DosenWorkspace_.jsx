@@ -12,13 +12,11 @@ function DosenWorkspace({ userId }) {
         <div className="grid gap-2 sm:grid-cols-2">
           <button
             type="button"
-            onClick={() =>
-              setActiveTab("kegiatan")
-            }
+            onClick={() => setActiveTab("kegiatan")}
             className={`rounded-xl px-4 py-3 text-sm font-semibold transition ${
               activeTab === "kegiatan"
-                ? "bg-gradient-to-r from-[#C5163A] via-[#8F1024] to-[#5B000A] text-white shadow-sm"
-                : "text-slate-600 hover:bg-[#FFF1F2] hover:text-[#881337]"
+                ? "bg-[#000080] text-white"
+                : "text-slate-600 hover:bg-slate-100"
             }`}
           >
             Kegiatan Penelitian dan PkM
@@ -26,13 +24,11 @@ function DosenWorkspace({ userId }) {
 
           <button
             type="button"
-            onClick={() =>
-              setActiveTab("luaran")
-            }
+            onClick={() => setActiveTab("luaran")}
             className={`rounded-xl px-4 py-3 text-sm font-semibold transition ${
               activeTab === "luaran"
-                ? "bg-gradient-to-r from-[#C5163A] via-[#8F1024] to-[#5B000A] text-white shadow-sm"
-                : "text-slate-600 hover:bg-[#FFF1F2] hover:text-[#881337]"
+                ? "bg-[#000080] text-white"
+                : "text-slate-600 hover:bg-slate-100"
             }`}
           >
             Publikasi dan Luaran

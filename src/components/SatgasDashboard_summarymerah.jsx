@@ -1644,10 +1644,8 @@ function SummaryCard({
   compact = false,
 }) {
   return (
-    <article className="relative overflow-hidden rounded-2xl border border-rose-100 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
-      <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#C5163A] via-[#8F1024] to-[#5B000A]" />
-
-      <p className="text-sm font-semibold text-[#A30E2D]">
+    <article className="rounded-2xl border border-[#881337]/10 bg-white p-5 shadow-sm">
+      <p className="text-sm font-semibold text-[#881337]">
         {title}
       </p>
 
