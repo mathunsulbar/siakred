@@ -192,9 +192,8 @@ function App() {
 
           <p className="mt-5 max-w-xl text-lg leading-8 text-white/80">
             Platform monitoring, evaluasi, tata kelola, dan repositori internal
-            untuk data penelitian, pengabdian kepada masyarakat, publikasi,
-            luaran, indikator kinerja, serta siklus PPEPP Program Studi
-            Matematika Universitas Sulawesi Barat.
+            untuk data penelitian, pengabdian kepada masyarakat, publikasi, 
+            serta siklus PPEPP Program Studi Matematika Universitas Sulawesi Barat.
           </p>
 
           <div className="mt-10 grid gap-3 text-sm text-rose-50">
