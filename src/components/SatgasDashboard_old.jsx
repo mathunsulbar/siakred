@@ -89,13 +89,8 @@ function SatgasDashboard() {
                 semester,
                 tahun_akademik,
                 ketua_kegiatan,
-                ketua_identitas,
                 anggota_dosen,
                 mahasiswa_terlibat,
-                anggota_dosen_data,
-                mahasiswa_data,
-                sumber_dana,
-                jumlah_dana,
                 jenis_indikator,
                 kode_indikator,
                 link_bukti,
@@ -274,6 +269,9 @@ function SatgasDashboard() {
             createdAt:
                 item.created_at,
 
+            createdAt:
+                item.created_at,
+
             year:
                 item.tahun,
 
@@ -302,21 +300,13 @@ function SatgasDashboard() {
                 item.ketua_kegiatan ?? "",
 
             ketuaIdentitas:
-                item.ketua_identitas ?? "",
+                "",
 
             anggotaDosen:
-                formatPeopleData(
-                item.anggota_dosen_data,
-                item.anggota_dosen,
-                "identitas",
-                ),
+                item.anggota_dosen ?? "",
 
             mahasiswa:
-                formatPeopleData(
-                item.mahasiswa_data,
-                item.mahasiswa_terlibat,
-                "nim",
-                ),
+                item.mahasiswa_terlibat ?? "",
 
             indicatorType:
                 item.jenis_indikator ?? "",
@@ -331,10 +321,10 @@ function SatgasDashboard() {
                 item.link_bukti ?? "",
 
             fundingSource:
-                item.sumber_dana ?? "",
+                "",
 
             fundingAmount:
-                Number(item.jumlah_dana ?? 0),
+                0,
             };
         });
 
@@ -451,12 +441,6 @@ function SatgasDashboard() {
             case "year":
             return Number(item.year ?? 0);
 
-            case "semester":
-            return item.semester ?? "";
-
-            case "tahunAkademik":
-            return item.tahunAkademik ?? "";
-
             case "category":
             return item.category ?? "";
 
@@ -465,15 +449,6 @@ function SatgasDashboard() {
 
             case "title":
             return item.title ?? "";
-
-            case "ketuaKegiatan":
-            return item.ketuaKegiatan ?? "";
-
-            case "anggotaDosen":
-            return item.anggotaDosen ?? "";
-
-            case "mahasiswa":
-            return item.mahasiswa ?? "";
 
             case "indicator":
             return [
@@ -488,9 +463,6 @@ function SatgasDashboard() {
 
             case "linkBukti":
             return item.linkBukti ?? "";
-
-            case "fundingSource":
-            return item.fundingSource ?? "";
 
             case "fundingAmount":
             return Number(item.fundingAmount ?? 0);
@@ -562,7 +534,7 @@ function SatgasDashboard() {
       (item) => item.status === "approved",
     );
 
-    const totalFunding = filteredData.reduce(
+    const totalFunding = activityRows.reduce(
       (total, item) =>
         total + Number(item.fundingAmount ?? 0),
       0,
@@ -642,9 +614,11 @@ function SatgasDashboard() {
             getStatusLabel(item.status),
             item.linkBukti || "",
 
-            item.fundingSource || "",
+            item.source === "Kegiatan"
+            ? item.fundingSource || ""
+            : "",
 
-            Number(item.fundingAmount ?? 0) > 0
+            item.source === "Kegiatan"
             ? Number(item.fundingAmount ?? 0)
             : "",
         ]);
@@ -763,7 +737,7 @@ function SatgasDashboard() {
             doc.setFontSize(12);
 
             doc.text(
-            "SISTEM INFORMASI MONITORING EVALUASI TATA KELOLA DAN REPOSITORI INTERNAL",
+            "SISTEM INFORMASI MANAJEMEN AKREDITASI INTERNAL",
             pageWidth / 2,
             23,
             {
@@ -906,9 +880,11 @@ function SatgasDashboard() {
                 ? "Buka Bukti"
                 : "-",
 
-            item.fundingSource || "-",
+            item.source === "Kegiatan"
+                ? item.fundingSource || "-"
+                : "-",
 
-            Number(item.fundingAmount ?? 0) > 0
+            item.source === "Kegiatan"
                 ? formatRupiah(item.fundingAmount)
                 : "-",
             ]);
@@ -951,7 +927,7 @@ function SatgasDashboard() {
                 },
 
                 headStyles: {
-                fillColor: [0, 0, 128],
+                fillColor: [37, 99, 235],
                 textColor: [255, 255, 255],
                 fontStyle: "bold",
                 fontSize: 8.5,
@@ -1021,7 +997,7 @@ function SatgasDashboard() {
                 9: {
                     cellWidth: 22,
                     halign: "center",
-                    textColor: [0, 0, 128],
+                    textColor: [37, 99, 235],
                     fontStyle: "bold",
                 },
 
@@ -1079,7 +1055,7 @@ function SatgasDashboard() {
             doc.setTextColor(100);
 
             doc.text(
-                "SIMETRI Program Studi Matematika",
+                "SIAKRED Program Studi Matematika",
                 10,
                 pageHeight - 7,
             );
@@ -1555,12 +1531,14 @@ function SatgasDashboard() {
 
                     {/* Sumber dana */}
                     <td className="min-w-[170px] px-3 py-4 text-slate-700">
-                        {item.fundingSource || "-"}
+                        {item.source === "Kegiatan"
+                        ? item.fundingSource || "-"
+                        : "-"}
                     </td>
 
                     {/* Pendanaan */}
                     <td className="min-w-[170px] whitespace-nowrap px-3 py-4 text-right">
-                        {Number(item.fundingAmount ?? 0) > 0 ? (
+                        {item.source === "Kegiatan" ? (
                         <span className="font-semibold text-slate-900">
                             {formatRupiah(
                             item.fundingAmount,

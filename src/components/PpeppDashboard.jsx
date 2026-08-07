@@ -655,7 +655,7 @@ function PpeppDashboard({ userId }) {
             <button
               type="submit"
               disabled={saving}
-              className="rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-blue-300"
+              className="rounded-xl bg-[#000080] px-6 py-3 font-semibold text-white hover:bg-[#000066] disabled:cursor-not-allowed disabled:bg-blue-300"
             >
               {saving
                 ? "Menyimpan..."
@@ -774,7 +774,7 @@ function PpeppDashboard({ userId }) {
                           onClick={() =>
                             handleEdit(indicator)
                           }
-                          className="rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-100"
+                          className="rounded-lg border border-[#000080]/20 bg-[#000080]/5 px-4 py-2 text-sm font-semibold text-[#000080] hover:bg-blue-100"
                         >
                           Edit
                         </button>

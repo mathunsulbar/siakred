@@ -5,29 +5,23 @@ import { supabase } from "../lib/supabase";
 const BUCKET_NAME = "bukti-akreditasi";
 const MAX_FILE_SIZE = 6 * 1024 * 1024;
 const MAX_IMPORT_ROWS = 500;
-const ACADEMIC_YEAR_OPTIONS =
-  createAcademicYearOptions();
-
 const EXCEL_TEMPLATE_FILE_NAME =
   "Template_Import_Publikasi_dan_Luaran.xlsx";
 
 const EXCEL_TEMPLATE_HEADERS = [
   "Asal Kegiatan",
   "Jenis Luaran",
-  "Tahun Terbit",
-  "Semester",
-  "Tahun Akademik",
   "Judul Publikasi atau Luaran",
   "Ketua Kegiatan",
-  "NIDN/NUPTK/NIP Ketua",
+  "Semester",
   "Anggota Dosen",
   "Mahasiswa Terlibat",
+  "Tahun Akademik",
+  "Tahun Terbit",
   "Nama Jurnal atau Penerbit",
   "Volume dan Nomor",
   "DOI atau URL",
   "Nomor HKI/Paten/ISBN",
-  "Sumber Dana",
-  "Jumlah Dana",
   "Jenis Indikator",
   "Kode Indikator",
   "Link Bukti",
@@ -51,34 +45,16 @@ function createInitialForm() {
     judul_luaran: "",
     tahun: new Date().getFullYear(),
 
+    ketua_kegiatan: "",
+    anggota_dosen: "",
+    mahasiswa_terlibat: "",
     semester: "ganjil",
     tahun_akademik: getDefaultAcademicYear(),
-
-    ketua_kegiatan: "",
-    ketua_identitas: "",
-
-    anggota_dosen_data: [
-      {
-        nama: "",
-        identitas: "",
-      },
-    ],
-
-    mahasiswa_data: [
-      {
-        nama: "",
-        nim: "",
-      },
-    ],
 
     nama_jurnal_penerbit: "",
     volume_nomor: "",
     doi_url: "",
     nomor_hki_isbn: "",
-
-    sumber_dana: "",
-    jumlah_dana: "",
-
     jenis_indikator: "",
     kode_indikator: "",
     link_bukti: "",
@@ -124,19 +100,14 @@ function LuaranDashboard({ userId }) {
             judul_luaran,
             tahun,
             ketua_kegiatan,
-            ketua_identitas,
             anggota_dosen,
             mahasiswa_terlibat,
-            anggota_dosen_data,
-            mahasiswa_data,
             semester,
             tahun_akademik,
             nama_jurnal_penerbit,
             volume_nomor,
             doi_url,
             nomor_hki_isbn,
-            sumber_dana,
-            jumlah_dana,
             jenis_indikator,
             kode_indikator,
             link_bukti,
@@ -182,119 +153,6 @@ function LuaranDashboard({ userId }) {
     }));
   }
 
-  function handleFundingChange(event) {
-    const digits = onlyDigits(event.target.value);
-
-    setForm((currentForm) => ({
-      ...currentForm,
-      jumlah_dana: digits,
-    }));
-  }
-
-  function handleAnggotaDosenChange(
-    index,
-    field,
-    value,
-  ) {
-    const safeValue =
-      field === "identitas"
-        ? onlyDigits(value)
-        : value;
-
-    setForm((currentForm) => {
-      const rows =
-        currentForm.anggota_dosen_data ?? [];
-
-      return {
-        ...currentForm,
-        anggota_dosen_data: rows.map(
-          (row, rowIndex) =>
-            rowIndex === index
-              ? {
-                  ...row,
-                  [field]: safeValue,
-                }
-              : row,
-        ),
-      };
-    });
-  }
-
-  function addAnggotaDosen() {
-    setForm((currentForm) => ({
-      ...currentForm,
-      anggota_dosen_data: [
-        ...(currentForm.anggota_dosen_data ?? []),
-        {
-          nama: "",
-          identitas: "",
-        },
-      ],
-    }));
-  }
-
-  function removeAnggotaDosen(index) {
-    setForm((currentForm) => ({
-      ...currentForm,
-      anggota_dosen_data:
-        currentForm.anggota_dosen_data.filter(
-          (_, rowIndex) => rowIndex !== index,
-        ),
-    }));
-  }
-
-  function handleMahasiswaChange(
-    index,
-    field,
-    value,
-  ) {
-    const safeValue =
-      field === "nim"
-        ? normalizeNim(value)
-        : value;
-
-    setForm((currentForm) => {
-      const rows =
-        currentForm.mahasiswa_data ?? [];
-
-      return {
-        ...currentForm,
-        mahasiswa_data: rows.map(
-          (row, rowIndex) =>
-            rowIndex === index
-              ? {
-                  ...row,
-                  [field]: safeValue,
-                }
-              : row,
-        ),
-      };
-    });
-  }
-
-  function addMahasiswa() {
-    setForm((currentForm) => ({
-      ...currentForm,
-      mahasiswa_data: [
-        ...(currentForm.mahasiswa_data ?? []),
-        {
-          nama: "",
-          nim: "",
-        },
-      ],
-    }));
-  }
-
-  function removeMahasiswa(index) {
-    setForm((currentForm) => ({
-      ...currentForm,
-      mahasiswa_data:
-        currentForm.mahasiswa_data.filter(
-          (_, rowIndex) => rowIndex !== index,
-        ),
-    }));
-  }
-
   function downloadExcelTemplate() {
     const currentYear = new Date().getFullYear();
     const academicYear = getDefaultAcademicYear();
@@ -303,25 +161,21 @@ function LuaranDashboard({ userId }) {
       {
         "Asal Kegiatan": "Penelitian",
         "Jenis Luaran": "Artikel Jurnal",
-        "Tahun Terbit": currentYear,
-        Semester: "Ganjil",
-        "Tahun Akademik": academicYear,
         "Judul Publikasi atau Luaran":
           "Pemodelan Matematika untuk Prediksi Risiko Banjir Perkotaan",
         "Ketua Kegiatan": "Andi Rahman",
-        "NIDN/NUPTK/NIP Ketua": "0123456789",
+        Semester: "Ganjil",
         "Anggota Dosen":
-          "Siti Aminah|0123456790; Muhammad Arif|0123456791",
+          "Siti Aminah|0123456789; Muhammad Arif|9876543210",
         "Mahasiswa Terlibat":
           "Nurul Hikmah|H0221001; Ahmad Fadli|H0221002",
+        "Tahun Akademik": academicYear,
+        "Tahun Terbit": currentYear,
         "Nama Jurnal atau Penerbit":
           "Jurnal Matematika dan Aplikasinya",
         "Volume dan Nomor": "Vol. 8 No. 2",
-        "DOI atau URL":
-          "https://doi.org/10.0000/contoh.001",
+        "DOI atau URL": "https://doi.org/10.0000/contoh.001",
         "Nomor HKI/Paten/ISBN": "",
-        "Sumber Dana": "DRTPM",
-        "Jumlah Dana": 25000000,
         "Jenis Indikator": "IKU",
         "Kode Indikator": "IKU-PEN-02",
         "Link Bukti": "https://drive.google.com/",
@@ -329,25 +183,18 @@ function LuaranDashboard({ userId }) {
       {
         "Asal Kegiatan": "PkM",
         "Jenis Luaran": "HKI",
-        "Tahun Terbit": currentYear,
-        Semester: "Genap",
-        "Tahun Akademik": academicYear,
         "Judul Publikasi atau Luaran":
           "Modul Pembelajaran Statistika Dasar untuk Guru Sekolah Menengah",
         "Ketua Kegiatan": "Siti Aminah",
-        "NIDN/NUPTK/NIP Ketua": "0123456790",
-        "Anggota Dosen":
-          "Andi Rahman|0123456789",
-        "Mahasiswa Terlibat":
-          "Rahmawati|H0221003",
-        "Nama Jurnal atau Penerbit":
-          "Direktorat Jenderal Kekayaan Intelektual",
+        Semester: "Genap",
+        "Anggota Dosen": "Andi Rahman|0123456789",
+        "Mahasiswa Terlibat": "Rahmawati|H0221003",
+        "Tahun Akademik": academicYear,
+        "Tahun Terbit": currentYear,
+        "Nama Jurnal atau Penerbit": "Direktorat Jenderal Kekayaan Intelektual",
         "Volume dan Nomor": "",
         "DOI atau URL": "",
-        "Nomor HKI/Paten/ISBN":
-          "EC00202600001",
-        "Sumber Dana": "Internal Unsulbar",
-        "Jumlah Dana": 5000000,
+        "Nomor HKI/Paten/ISBN": "EC00202600001",
         "Jenis Indikator": "IKT",
         "Kode Indikator": "IKT-PKM-02",
         "Link Bukti": "https://drive.google.com/",
@@ -364,50 +211,45 @@ function LuaranDashboard({ userId }) {
     worksheet["!cols"] = [
       { wch: 18 },
       { wch: 24 },
-      { wch: 14 },
-      { wch: 12 },
-      { wch: 18 },
       { wch: 55 },
       { wch: 28 },
-      { wch: 24 },
+      { wch: 12 },
       { wch: 55 },
       { wch: 55 },
+      { wch: 18 },
+      { wch: 14 },
       { wch: 40 },
       { wch: 20 },
       { wch: 42 },
       { wch: 28 },
-      { wch: 24 },
-      { wch: 18 },
       { wch: 18 },
       { wch: 20 },
       { wch: 45 },
     ];
 
     worksheet["!autofilter"] = {
-      ref: `A1:S${sampleRows.length + 1}`,
+      ref: `A1:P${sampleRows.length + 1}`,
     };
 
     const guideRows = [
       ["PETUNJUK IMPORT PUBLIKASI DAN LUARAN"],
       ["1. Jangan mengubah nama kolom pada sheet Publikasi dan Luaran."],
       ["2. Asal Kegiatan diisi Penelitian atau PkM."],
-      ["3. Jenis Luaran mengikuti pilihan pada formulir SIMETRI."],
+      ["3. Jenis Luaran mengikuti pilihan pada formulir SIAKRED."],
       ["4. Semester diisi Ganjil atau Genap."],
       ["5. Format Tahun Akademik: 2026/2027."],
-      ["6. NIDN/NUPTK/NIP Ketua wajib berupa angka."],
-      ["7. Anggota Dosen bersifat opsional. Jika diisi gunakan format Nama|NIDN/NUPTK/NIP; Nama|NIDN/NUPTK/NIP."],
-      ["8. Mahasiswa bersifat opsional. Jika diisi gunakan format Nama|NIM; Nama|NIM."],
-      ["9. Jumlah Dana diisi angka tanpa simbol Rp dan tanpa titik pemisah ribuan."],
-      ["10. Link Bukti wajib diawali http:// atau https://."],
-      ["11. Dokumen bukti tidak diimpor. Gunakan Link Bukti untuk bukti yang dapat diakses reviewer."],
-      [`12. Maksimal ${MAX_IMPORT_ROWS} baris dalam satu kali import.`],
-      ["13. Hapus dua baris contoh sebelum mengisi data resmi."],
+      ["6. Anggota Dosen dapat ditulis Nama|NIDN/NUPTK/NIP; Nama|NIDN/NUPTK/NIP."],
+      ["7. Mahasiswa dapat ditulis Nama|NIM; Nama|NIM."],
+      ["8. Link Bukti wajib diawali http:// atau https://."],
+      ["9. Dokumen bukti tidak diimpor. Gunakan Link Bukti untuk bukti yang dapat diakses reviewer."],
+      [`10. Maksimal ${MAX_IMPORT_ROWS} baris dalam satu kali import.`],
+      ["11. Hapus dua baris contoh sebelum mengisi data resmi."],
     ];
 
     const guideSheet =
       XLSX.utils.aoa_to_sheet(guideRows);
 
-    guideSheet["!cols"] = [{ wch: 130 }];
+    guideSheet["!cols"] = [{ wch: 115 }];
 
     const workbook = XLSX.utils.book_new();
 
@@ -614,7 +456,7 @@ function LuaranDashboard({ userId }) {
     }
 
     const confirmed = window.confirm(
-      `Simpan ${validRows.length} data valid ke SIMETRI dengan status Pending?`,
+      `Simpan ${validRows.length} data valid ke SIAKRED dengan status Pending?`,
     );
 
     if (!confirmed) {
@@ -650,54 +492,25 @@ function LuaranDashboard({ userId }) {
         jenis_luaran: data.jenis_luaran,
         judul_luaran: data.judul_luaran,
         tahun: data.tahun,
+        ketua_kegiatan: data.ketua_kegiatan,
+        anggota_dosen: data.anggota_dosen || null,
+        mahasiswa_terlibat:
+          data.mahasiswa_terlibat || null,
         semester: data.semester,
         tahun_akademik: data.tahun_akademik,
-
-        ketua_kegiatan: data.ketua_kegiatan,
-        ketua_identitas: data.ketua_identitas,
-
-        anggota_dosen_data:
-          data.anggota_dosen_data,
-        mahasiswa_data:
-          data.mahasiswa_data,
-
-        anggota_dosen:
-          formatPeopleRowsForLegacy(
-            data.anggota_dosen_data,
-            "identitas",
-          ) || null,
-
-        mahasiswa_terlibat:
-          formatPeopleRowsForLegacy(
-            data.mahasiswa_data,
-            "nim",
-          ) || null,
-
         nama_jurnal_penerbit:
           data.nama_jurnal_penerbit || null,
-        volume_nomor:
-          data.volume_nomor || null,
-        doi_url:
-          data.doi_url || null,
+        volume_nomor: data.volume_nomor || null,
+        doi_url: data.doi_url || null,
         nomor_hki_isbn:
           data.nomor_hki_isbn || null,
-
-        sumber_dana:
-          data.sumber_dana || null,
-        jumlah_dana:
-          Number(data.jumlah_dana ?? 0),
-
         jenis_indikator:
           data.jenis_indikator || null,
         kode_indikator:
           data.kode_indikator || null,
-
-        link_bukti:
-          data.link_bukti,
-        dokumen_bukti_path:
-          null,
-        status_gpm:
-          "pending",
+        link_bukti: data.link_bukti,
+        dokumen_bukti_path: null,
+        status_gpm: "pending",
       }));
 
       const { error } = await supabase
@@ -802,18 +615,14 @@ function LuaranDashboard({ userId }) {
     return `${safeBaseName || "dokumen"}${extension}`;
   }
 
-  async function uploadEvidence(
-    file,
-    ownerId,
-  ) {
-    const safeFileName =
-      createSafeFileName(file.name);
+  async function uploadEvidence(file) {
+    const safeFileName = createSafeFileName(file.name);
 
     const uniqueName =
       `${Date.now()}-${crypto.randomUUID()}-${safeFileName}`;
 
     const filePath =
-      `${ownerId}/luaran/${uniqueName}`;
+      `${userId}/luaran/${uniqueName}`;
 
     const { data, error } = await supabase.storage
       .from(BUCKET_NAME)
@@ -926,72 +735,55 @@ function LuaranDashboard({ userId }) {
     setFileInputKey((current) => current + 1);
 
     setForm({
-      jenis_kegiatan:
-        output.jenis_kegiatan ?? "penelitian",
+        jenis_kegiatan:
+            output.jenis_kegiatan ?? "penelitian",
 
-      jenis_luaran:
-        output.jenis_luaran ?? "Artikel Jurnal",
+        jenis_luaran:
+            output.jenis_luaran ?? "Artikel Jurnal",
 
-      tahun:
-        output.tahun ?? new Date().getFullYear(),
+        judul_luaran:
+            output.judul_luaran ?? "",
 
-      semester:
-        output.semester ?? "ganjil",
+        tahun:
+            output.tahun ?? new Date().getFullYear(),
 
-      tahun_akademik:
-        output.tahun_akademik ??
-        getDefaultAcademicYear(),
+        ketua_kegiatan:
+            output.ketua_kegiatan ?? "",
 
-      judul_luaran:
-        output.judul_luaran ?? "",
+        anggota_dosen:
+            output.anggota_dosen ?? "",
 
-      ketua_kegiatan:
-        output.ketua_kegiatan ?? "",
+        mahasiswa_terlibat:
+            output.mahasiswa_terlibat ?? "",
 
-      ketua_identitas:
-        output.ketua_identitas ?? "",
+        semester:
+            output.semester ?? "ganjil",
 
-      anggota_dosen_data:
-        normalizePeopleRows(
-          output.anggota_dosen_data,
-          output.anggota_dosen,
-          "identitas",
-        ),
+        tahun_akademik:
+            output.tahun_akademik ??
+            getDefaultAcademicYear(),
 
-      mahasiswa_data:
-        normalizePeopleRows(
-          output.mahasiswa_data,
-          output.mahasiswa_terlibat,
-          "nim",
-        ),
+        nama_jurnal_penerbit:
+            output.nama_jurnal_penerbit ?? "",
 
-      nama_jurnal_penerbit:
-        output.nama_jurnal_penerbit ?? "",
+        volume_nomor:
+            output.volume_nomor ?? "",
 
-      volume_nomor:
-        output.volume_nomor ?? "",
+        doi_url:
+            output.doi_url ?? "",
 
-      doi_url:
-        output.doi_url ?? "",
+        nomor_hki_isbn:
+            output.nomor_hki_isbn ?? "",
 
-      nomor_hki_isbn:
-        output.nomor_hki_isbn ?? "",
+        jenis_indikator:
+            output.jenis_indikator ?? "",
 
-      sumber_dana:
-        output.sumber_dana ?? "",
+        kode_indikator:
+            output.kode_indikator ?? "",
 
-      jumlah_dana:
-        String(output.jumlah_dana ?? ""),
-
-      jenis_indikator:
-        output.jenis_indikator ?? "",
-
-      kode_indikator:
-        output.kode_indikator ?? "",
-
-      link_bukti:
-        output.link_bukti ?? "",
-    });
+        link_bukti:
+            output.link_bukti ?? "",
+        });
 
     setMessage("");
     setMessageType("");
@@ -1013,123 +805,56 @@ function LuaranDashboard({ userId }) {
   }
 
   async function handleSubmit(event) {
-    event.preventDefault();
-
-    const judulLuaran =
-      String(form.judul_luaran ?? "").trim();
+  event.preventDefault();
 
     const linkBukti =
-      String(form.link_bukti ?? "").trim();
+        String(form.link_bukti ?? "").trim();
 
-    const ketuaKegiatan =
-      String(form.ketua_kegiatan ?? "").trim();
-
-    const ketuaIdentitas =
-      onlyDigits(form.ketua_identitas);
-
-    const tahunAkademik =
-      String(form.tahun_akademik ?? "").trim();
-
-    const jumlahDana =
-      onlyDigits(form.jumlah_dana);
-
-    const anggotaDosen = preparePeopleRows(
-      form.anggota_dosen_data,
-      "identitas",
-    );
-
-    const mahasiswa = preparePeopleRows(
-      form.mahasiswa_data,
-      "nim",
-    );
-
-    if (!judulLuaran) {
-      setMessageType("error");
-      setMessage(
+    if (!form.judul_luaran.trim()) {
+        setMessageType("error");
+        setMessage(
         "Judul publikasi atau luaran wajib diisi.",
-      );
-      return;
-    }
-
-    if (
-      form.semester !== "ganjil" &&
-      form.semester !== "genap"
-    ) {
-      setMessageType("error");
-      setMessage(
-        "Semester wajib dipilih: Ganjil atau Genap.",
-      );
-      return;
-    }
-
-    if (!isValidAcademicYear(tahunAkademik)) {
-      setMessageType("error");
-      setMessage(
-        "Tahun akademik tidak valid. Gunakan format 2026/2027.",
-      );
-      return;
-    }
-
-    if (!ketuaKegiatan) {
-      setMessageType("error");
-      setMessage("Nama ketua kegiatan wajib diisi.");
-      return;
-    }
-
-    if (!ketuaIdentitas) {
-      setMessageType("error");
-      setMessage(
-        "NIDN/NUPTK/NIP ketua wajib diisi dengan angka.",
-      );
-      return;
-    }
-
-    const anggotaTidakLengkap =
-      anggotaDosen.some((anggota) => {
-        return (
-          !anggota.nama ||
-          !anggota.identitas
         );
-      });
-
-    if (anggotaTidakLengkap) {
-      setMessageType("error");
-      setMessage(
-        "Setiap anggota dosen yang ditambahkan harus memiliki nama dan NIDN/NUPTK/NIP.",
-      );
-      return;
+        return;
     }
 
-    const mahasiswaTidakLengkap =
-      mahasiswa.some((item) => {
-        return (
-          !item.nama ||
-          !item.nim
+    if (!String(form.ketua_kegiatan ?? "").trim()) {
+        setMessageType("error");
+        setMessage("Nama ketua kegiatan wajib diisi.");
+        return;
+        }
+
+        if (!form.semester) {
+        setMessageType("error");
+        setMessage("Semester wajib dipilih.");
+        return;
+        }
+
+        const tahunAkademik =
+        String(form.tahun_akademik ?? "").trim();
+
+        if (!isValidAcademicYear(tahunAkademik)) {
+        setMessageType("error");
+        setMessage(
+            "Tahun akademik tidak valid. Gunakan format 2026/2027.",
         );
-      });
-
-    if (mahasiswaTidakLengkap) {
-      setMessageType("error");
-      setMessage(
-        "Setiap mahasiswa yang ditambahkan harus memiliki nama dan NIM.",
-      );
-      return;
-    }
+        return;
+        }
 
     if (!linkBukti) {
-      setMessageType("error");
-      setMessage("Link bukti wajib diisi.");
-      return;
+        setMessageType("error");
+        setMessage("Link bukti wajib diisi.");
+        return;
     }
 
     if (!isValidHttpUrl(linkBukti)) {
-      setMessageType("error");
-      setMessage(
+        setMessageType("error");
+        setMessage(
         "Link bukti tidak valid. Gunakan alamat yang diawali http:// atau https://.",
-      );
-      return;
+        );
+        return;
     }
-
+      
     let newUploadedPath = null;
 
     try {
@@ -1137,30 +862,9 @@ function LuaranDashboard({ userId }) {
       setMessage("");
       setMessageType("");
 
-      const {
-        data: { user: authUser },
-        error: authError,
-      } = await supabase.auth.getUser();
-
-      if (authError) {
-        throw authError;
-      }
-
-      const currentUserId =
-        userId || authUser?.id;
-
-      if (!currentUserId) {
-        throw new Error(
-          "Sesi login tidak ditemukan. Silakan login kembali.",
-        );
-      }
-
       if (evidenceFile) {
         newUploadedPath =
-          await uploadEvidence(
-            evidenceFile,
-            currentUserId,
-          );
+          await uploadEvidence(evidenceFile);
       }
 
       const finalEvidencePath =
@@ -1169,103 +873,52 @@ function LuaranDashboard({ userId }) {
         null;
 
       const outputData = {
-        dosen_id:
-          currentUserId,
-
-        jenis_kegiatan:
-          form.jenis_kegiatan,
-
-        jenis_luaran:
-          form.jenis_luaran,
-
-        tahun:
-          Number(form.tahun),
-
-        semester:
-          form.semester,
-
-        tahun_akademik:
-          tahunAkademik,
+        jenis_kegiatan: form.jenis_kegiatan,
+        jenis_luaran: form.jenis_luaran,
 
         judul_luaran:
-          judulLuaran,
+            form.judul_luaran.trim(),
+
+        tahun: Number(form.tahun),
 
         ketua_kegiatan:
-          ketuaKegiatan,
-
-        ketua_identitas:
-          ketuaIdentitas,
-
-        anggota_dosen_data:
-          anggotaDosen,
-
-        mahasiswa_data:
-          mahasiswa,
+            String(form.ketua_kegiatan ?? "").trim(),
 
         anggota_dosen:
-          anggotaDosen.length > 0
-            ? anggotaDosen
-                .map(
-                  (anggota) =>
-                    `${anggota.nama} (${anggota.identitas})`,
-                )
-                .join("\n")
-            : null,
+            String(form.anggota_dosen ?? "").trim() || null,
 
         mahasiswa_terlibat:
-          mahasiswa.length > 0
-            ? mahasiswa
-                .map(
-                  (item) =>
-                    `${item.nama} (${item.nim})`,
-                )
-                .join("\n")
-            : null,
+            String(form.mahasiswa_terlibat ?? "").trim() || null,
+
+        semester:
+            form.semester,
+
+        tahun_akademik:
+            tahunAkademik,
 
         nama_jurnal_penerbit:
-          String(
-            form.nama_jurnal_penerbit ?? "",
-          ).trim() || null,
+            form.nama_jurnal_penerbit.trim() || null,
 
         volume_nomor:
-          String(
-            form.volume_nomor ?? "",
-          ).trim() || null,
+            form.volume_nomor.trim() || null,
 
         doi_url:
-          String(
-            form.doi_url ?? "",
-          ).trim() || null,
+            form.doi_url.trim() || null,
 
         nomor_hki_isbn:
-          String(
-            form.nomor_hki_isbn ?? "",
-          ).trim() || null,
-
-        sumber_dana:
-          String(
-            form.sumber_dana ?? "",
-          ).trim() || null,
-
-        jumlah_dana:
-          jumlahDana
-            ? Number(jumlahDana)
-            : 0,
+            form.nomor_hki_isbn.trim() || null,
 
         jenis_indikator:
-          form.jenis_indikator || null,
+            form.jenis_indikator || null,
 
         kode_indikator:
-          String(
-            form.kode_indikator ?? "",
-          ).trim() || null,
+            form.kode_indikator.trim() || null,
 
-        link_bukti:
-          linkBukti,
+        link_bukti: linkBukti,
 
         dokumen_bukti_path:
-          finalEvidencePath,
-      };
+            finalEvidencePath,
+        };
 
       if (editingId) {
         const { error } = await supabase
@@ -1275,7 +928,7 @@ function LuaranDashboard({ userId }) {
             status_gpm: "pending",
           })
           .eq("id", editingId)
-          .eq("dosen_id", currentUserId);
+          .eq("dosen_id", userId);
 
         if (error) {
           throw error;
@@ -1286,9 +939,7 @@ function LuaranDashboard({ userId }) {
           existingEvidencePath &&
           newUploadedPath !== existingEvidencePath
         ) {
-          await removeEvidence(
-            existingEvidencePath,
-          );
+          await removeEvidence(existingEvidencePath);
         }
 
         setMessage(
@@ -1299,6 +950,7 @@ function LuaranDashboard({ userId }) {
           .from("publikasi_dan_luaran")
           .insert({
             ...outputData,
+            dosen_id: userId,
             status_gpm: "pending",
           });
 
@@ -1316,10 +968,7 @@ function LuaranDashboard({ userId }) {
 
       await loadOutputs();
     } catch (error) {
-      console.error(
-        "Gagal menyimpan luaran:",
-        error,
-      );
+      console.error("Gagal menyimpan luaran:", error);
 
       if (newUploadedPath) {
         await removeEvidence(newUploadedPath);
@@ -1327,11 +976,7 @@ function LuaranDashboard({ userId }) {
 
       setMessageType("error");
 
-      if (
-        error.message?.includes(
-          "row-level security",
-        )
-      ) {
+      if (error.message?.includes("row-level security")) {
         setMessage(
           "Data ditolak oleh sistem keamanan. Pastikan akun memiliki role Dosen.",
         );
@@ -1685,75 +1330,6 @@ function LuaranDashboard({ userId }) {
             </select>
           </FormField>
 
-          <FormField
-            label="Tahun terbit atau luaran"
-            htmlFor="tahun_luaran"
-            required
-          >
-            <input
-              id="tahun_luaran"
-              name="tahun"
-              type="number"
-              min="2000"
-              max="2100"
-              value={form.tahun}
-              onChange={handleChange}
-              className={inputClassName}
-              required
-            />
-          </FormField>
-
-          <FormField
-            label="Semester"
-            htmlFor="semester_luaran"
-            required
-          >
-            <select
-              id="semester_luaran"
-              name="semester"
-              value={form.semester}
-              onChange={handleChange}
-              className={inputClassName}
-              required
-            >
-              <option value="ganjil">
-                Ganjil
-              </option>
-
-              <option value="genap">
-                Genap
-              </option>
-            </select>
-          </FormField>
-
-          <FormField
-            label="Tahun akademik"
-            htmlFor="tahun_akademik_luaran"
-            required
-          >
-            <select
-              id="tahun_akademik_luaran"
-              name="tahun_akademik"
-              value={form.tahun_akademik}
-              onChange={handleChange}
-              className={inputClassName}
-              required
-            >
-              {ACADEMIC_YEAR_OPTIONS.map(
-                (academicYear) => (
-                  <option
-                    key={academicYear}
-                    value={academicYear}
-                  >
-                    {academicYear}
-                  </option>
-                ),
-              )}
-            </select>
-          </FormField>
-
-          <div className="hidden md:block" />
-
           <div className="md:col-span-2">
             <FormField
               label="Judul publikasi atau luaran"
@@ -1777,197 +1353,116 @@ function LuaranDashboard({ userId }) {
             label="Ketua kegiatan"
             htmlFor="ketua_kegiatan_luaran"
             required
-          >
+            >
             <input
-              id="ketua_kegiatan_luaran"
-              name="ketua_kegiatan"
-              type="text"
-              value={form.ketua_kegiatan}
-              onChange={handleChange}
-              placeholder="Nama lengkap ketua"
-              className={inputClassName}
-              required
+                id="ketua_kegiatan_luaran"
+                name="ketua_kegiatan"
+                type="text"
+                value={form.ketua_kegiatan}
+                onChange={handleChange}
+                placeholder="Nama lengkap ketua"
+                className={inputClassName}
+                required
             />
-          </FormField>
+            </FormField>
+
+            <FormField
+            label="Semester"
+            htmlFor="semester_luaran"
+            required
+            >
+            <select
+                id="semester_luaran"
+                name="semester"
+                value={form.semester}
+                onChange={handleChange}
+                className={inputClassName}
+                required
+            >
+                <option value="ganjil">
+                Ganjil
+                </option>
+
+                <option value="genap">
+                Genap
+                </option>
+            </select>
+            </FormField>
+
+            <div className="md:col-span-2">
+            <FormField
+                label="Anggota dosen"
+                htmlFor="anggota_dosen_luaran"
+            >
+                <textarea
+                id="anggota_dosen_luaran"
+                name="anggota_dosen"
+                rows="3"
+                value={form.anggota_dosen}
+                onChange={handleChange}
+                placeholder="Tuliskan nama anggota dosen, pisahkan dengan koma atau baris baru"
+                className={inputClassName}
+                />
+            </FormField>
+            </div>
+
+            <div className="md:col-span-2">
+            <FormField
+                label="Mahasiswa terlibat"
+                htmlFor="mahasiswa_terlibat_luaran"
+            >
+                <textarea
+                id="mahasiswa_terlibat_luaran"
+                name="mahasiswa_terlibat"
+                rows="3"
+                value={form.mahasiswa_terlibat}
+                onChange={handleChange}
+                placeholder="Tuliskan nama mahasiswa dan NIM, pisahkan dengan koma atau baris baru"
+                className={inputClassName}
+                />
+            </FormField>
+            </div>
+
+            <FormField
+            label="Tahun akademik"
+            htmlFor="tahun_akademik_luaran"
+            required
+            >
+            <input
+                id="tahun_akademik_luaran"
+                name="tahun_akademik"
+                type="text"
+                value={form.tahun_akademik}
+                onChange={handleChange}
+                placeholder="Contoh: 2026/2027"
+                pattern="[0-9]{4}/[0-9]{4}"
+                className={inputClassName}
+                required
+            />
+
+            <p className="mt-2 text-xs text-slate-500">
+                Gunakan format tahun awal/tahun akhir,
+                misalnya 2026/2027.
+            </p>
+            </FormField>
 
           <FormField
-            label="NIDN/NUPTK/NIP ketua"
-            htmlFor="ketua_identitas_luaran"
+            label="Tahun terbit atau luaran"
+            htmlFor="tahun_luaran"
             required
           >
             <input
-              id="ketua_identitas_luaran"
-              name="ketua_identitas"
-              type="text"
-              inputMode="numeric"
-              pattern="[0-9]*"
-              value={form.ketua_identitas}
-              onChange={(event) =>
-                setForm((currentForm) => ({
-                  ...currentForm,
-                  ketua_identitas:
-                    onlyDigits(event.target.value),
-                }))
-              }
-              placeholder="Masukkan angka saja"
+              id="tahun_luaran"
+              name="tahun"
+              type="number"
+              min="2000"
+              max="2100"
+              value={form.tahun}
+              onChange={handleChange}
               className={inputClassName}
               required
             />
           </FormField>
-
-          <div className="md:col-span-2">
-            <div className="mb-3 flex items-center justify-between">
-              <div>
-                <h4 className="font-semibold text-slate-800">
-                  Anggota dosen
-                </h4>
-
-                <p className="mt-1 text-xs text-slate-500">
-                  Opsional. Tambahkan nama dan NIDN/NUPTK/NIP
-                  setiap anggota.
-                </p>
-              </div>
-
-              <button
-                type="button"
-                onClick={addAnggotaDosen}
-                className="rounded-lg border border-[#000080]/20 bg-[#000080]/5 px-3 py-2 text-sm font-semibold text-[#000080] hover:bg-[#000080]/10"
-              >
-                + Tambah Anggota
-              </button>
-            </div>
-
-            <div className="space-y-3">
-              {(form.anggota_dosen_data ?? []).map(
-                (anggota, index) => (
-                  <div
-                    key={`luaran-anggota-${index}`}
-                    className="grid gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 md:grid-cols-[1fr_1fr_auto]"
-                  >
-                    <input
-                      type="text"
-                      value={anggota.nama}
-                      onChange={(event) =>
-                        handleAnggotaDosenChange(
-                          index,
-                          "nama",
-                          event.target.value,
-                        )
-                      }
-                      placeholder="Nama anggota dosen"
-                      className={inputClassName}
-                    />
-
-                    <input
-                      type="text"
-                      inputMode="numeric"
-                      pattern="[0-9]*"
-                      value={anggota.identitas}
-                      onChange={(event) =>
-                        handleAnggotaDosenChange(
-                          index,
-                          "identitas",
-                          event.target.value,
-                        )
-                      }
-                      placeholder="NIDN/NUPTK/NIP"
-                      className={inputClassName}
-                    />
-
-                    {(form.anggota_dosen_data ?? [])
-                      .length > 1 && (
-                      <button
-                        type="button"
-                        onClick={() =>
-                          removeAnggotaDosen(index)
-                        }
-                        className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm font-semibold text-red-700 hover:bg-red-100"
-                      >
-                        Hapus
-                      </button>
-                    )}
-                  </div>
-                ),
-              )}
-            </div>
-          </div>
-
-          <div className="md:col-span-2">
-            <div className="mb-3 flex items-center justify-between">
-              <div>
-                <h4 className="font-semibold text-slate-800">
-                  Mahasiswa terlibat
-                </h4>
-
-                <p className="mt-1 text-xs text-slate-500">
-                  Opsional. Tambahkan nama dan NIM setiap
-                  mahasiswa.
-                </p>
-              </div>
-
-              <button
-                type="button"
-                onClick={addMahasiswa}
-                className="rounded-lg border border-[#000080]/20 bg-[#000080]/5 px-3 py-2 text-sm font-semibold text-[#000080] hover:bg-[#000080]/10"
-              >
-                + Tambah Mahasiswa
-              </button>
-            </div>
-
-            <div className="space-y-3">
-              {(form.mahasiswa_data ?? []).map(
-                (mahasiswa, index) => (
-                  <div
-                    key={`luaran-mahasiswa-${index}`}
-                    className="grid gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 md:grid-cols-[1fr_1fr_auto]"
-                  >
-                    <input
-                      type="text"
-                      value={mahasiswa.nama}
-                      onChange={(event) =>
-                        handleMahasiswaChange(
-                          index,
-                          "nama",
-                          event.target.value,
-                        )
-                      }
-                      placeholder="Nama mahasiswa"
-                      className={inputClassName}
-                    />
-
-                    <input
-                      type="text"
-                      inputMode="text"
-                      pattern="[A-Za-z0-9]*"
-                      value={mahasiswa.nim ?? ""}
-                      onChange={(event) =>
-                        handleMahasiswaChange(
-                          index,
-                          "nim",
-                          event.target.value,
-                        )
-                      }
-                      placeholder="NIM, huruf dan angka"
-                      className={inputClassName}
-                    />
-
-                    {(form.mahasiswa_data ?? [])
-                      .length > 1 && (
-                      <button
-                        type="button"
-                        onClick={() =>
-                          removeMahasiswa(index)
-                        }
-                        className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm font-semibold text-red-700 hover:bg-red-100"
-                      >
-                        Hapus
-                      </button>
-                    )}
-                  </div>
-                ),
-              )}
-            </div>
-          </div>
 
           <FormField
             label="Nama jurnal atau penerbit"
@@ -2030,44 +1525,6 @@ function LuaranDashboard({ userId }) {
           </FormField>
 
           <FormField
-            label="Sumber dana"
-            htmlFor="sumber_dana_luaran"
-          >
-            <input
-              id="sumber_dana_luaran"
-              name="sumber_dana"
-              type="text"
-              value={form.sumber_dana}
-              onChange={handleChange}
-              placeholder="Internal, DRTPM, mandiri, mitra"
-              className={inputClassName}
-            />
-          </FormField>
-
-          <FormField
-            label="Jumlah dana (Rp)"
-            htmlFor="jumlah_dana_luaran"
-          >
-            <input
-              id="jumlah_dana_luaran"
-              name="jumlah_dana"
-              type="text"
-              inputMode="numeric"
-              value={formatNominalInput(
-                form.jumlah_dana,
-              )}
-              onChange={handleFundingChange}
-              placeholder="Contoh: 10.000.000"
-              className={inputClassName}
-            />
-
-            <p className="mt-2 text-xs text-slate-500">
-              Masukkan angka. Pemisah ribuan ditambahkan
-              secara otomatis.
-            </p>
-          </FormField>
-
-          <FormField
             label="Jenis indikator"
             htmlFor="jenis_indikator_luaran"
           >
@@ -2102,34 +1559,33 @@ function LuaranDashboard({ userId }) {
             />
           </FormField>
 
+            <div className="md:col-span-2">
+        <FormField
+            label="Link bukti"
+            htmlFor="link_bukti_luaran"
+            required
+        >
+            <input
+            id="link_bukti_luaran"
+            name="link_bukti"
+            type="url"
+            value={form.link_bukti}
+            onChange={handleChange}
+            placeholder="Lampirkan link file yang bisa diakses"
+            className={inputClassName}
+            required
+            />
+
+            <p className="mt-2 text-xs text-slate-500">
+            Masukkan tautan publikasi, DOI, repository,
+            Google Drive, OneDrive, HKI, atau sumber bukti
+            lainnya. Pastikan reviewer dapat membuka tautan.
+            </p>
+        </FormField>
+        </div>
           <div className="md:col-span-2">
             <FormField
-              label="Link bukti"
-              htmlFor="link_bukti_luaran"
-              required
-            >
-              <input
-                id="link_bukti_luaran"
-                name="link_bukti"
-                type="url"
-                value={form.link_bukti}
-                onChange={handleChange}
-                placeholder="Lampirkan link file yang bisa diakses"
-                className={inputClassName}
-                required
-              />
-
-              <p className="mt-2 text-xs text-slate-500">
-                Masukkan tautan publikasi, DOI, repository,
-                Google Drive, OneDrive, HKI, atau sumber bukti
-                lainnya. Pastikan reviewer dapat membuka tautan.
-              </p>
-            </FormField>
-          </div>
-
-          <div className="md:col-span-2">
-            <FormField
-              label="Dokumen bukti tambahan"
+              label="Dokumen bukti"
               htmlFor="dokumen_bukti_luaran"
             >
               <input
@@ -2138,16 +1594,15 @@ function LuaranDashboard({ userId }) {
                 type="file"
                 accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx"
                 onChange={handleFileChange}
-                className="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-700 file:mr-4 file:rounded-lg file:border-0 file:bg-[#000080]/5 file:px-4 file:py-2 file:font-semibold file:text-[#000080] hover:file:bg-[#000080]/10"
+                className="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-700 file:mr-4 file:rounded-lg file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:font-semibold file:text-blue-700 hover:file:bg-blue-100"
               />
 
               <p className="mt-2 text-xs text-slate-500">
                 Opsional. Format PDF, JPG, PNG, Word, atau Excel.
                 Ukuran maksimal 6 MB.
               </p>
-
               {evidenceFile && (
-                <div className="mt-3 rounded-lg border border-[#000080]/20 bg-[#000080]/5 p-3 text-sm text-[#000080]">
+                <div className="mt-3 rounded-lg border border-blue-200 bg-blue-50 p-3 text-sm text-blue-700">
                   File baru: {evidenceFile.name}
                 </div>
               )}
@@ -2163,9 +1618,7 @@ function LuaranDashboard({ userId }) {
                     <button
                       type="button"
                       onClick={() =>
-                        openEvidence(
-                          existingEvidencePath,
-                        )
+                        openEvidence(existingEvidencePath)
                       }
                       className="text-sm font-semibold text-green-700 underline"
                     >
@@ -2182,7 +1635,7 @@ function LuaranDashboard({ userId }) {
                 type="button"
                 onClick={handleCancelEdit}
                 disabled={saving}
-                className="rounded-xl border border-slate-300 bg-white px-6 py-3 font-semibold text-slate-700 hover:bg-slate-50"
+                className="rounded-xl border border-slate-300 px-6 py-3 font-semibold text-slate-700 hover:bg-slate-50"
               >
                 Batal Memperbaiki
               </button>
@@ -2191,7 +1644,7 @@ function LuaranDashboard({ userId }) {
             <button
               type="submit"
               disabled={saving}
-              className="rounded-xl bg-[#000080] px-6 py-3 font-semibold text-white hover:bg-[#000066] disabled:cursor-not-allowed disabled:bg-slate-400"
+              className="rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700 disabled:bg-blue-300"
             >
               {saving
                 ? "Mengunggah dan menyimpan..."
@@ -2287,13 +1740,7 @@ function OutputHistory({
 
                   <p className="mt-2 text-sm text-slate-600">
                     Ketua: {output.ketua_kegiatan || "-"}
-                  </p>
-
-                  {output.ketua_identitas && (
-                    <p className="mt-1 text-xs text-slate-500">
-                      NIDN/NUPTK/NIP: {output.ketua_identitas}
                     </p>
-                  )}
 
                     <p className="mt-1 text-xs text-slate-500">
                     Semester{" "}
@@ -2322,18 +1769,6 @@ function OutputHistory({
                   {output.nama_jurnal_penerbit && (
                     <p className="mt-1 text-sm text-slate-500">
                       {output.nama_jurnal_penerbit}
-                    </p>
-                  )}
-
-                  {(output.sumber_dana ||
-                    Number(output.jumlah_dana ?? 0) > 0) && (
-                    <p className="mt-1 text-xs text-slate-500">
-                      Pendanaan:{" "}
-                      {output.sumber_dana || "-"}
-                      {" • "}
-                      {Number(output.jumlah_dana ?? 0) > 0
-                        ? formatRupiah(output.jumlah_dana)
-                        : "-"}
                     </p>
                   )}
 
@@ -2532,193 +1967,7 @@ function StatusBadge({ status }) {
 }
 
 const inputClassName =
-  "w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-[#000080] focus:ring-4 focus:ring-[#000080]/10";
-
-function onlyDigits(value) {
-  return String(value ?? "").replace(/\D/g, "");
-}
-
-function normalizeNim(value) {
-  return String(value ?? "")
-    .toUpperCase()
-    .replace(/[^A-Z0-9]/g, "");
-}
-
-function formatNominalInput(value) {
-  const digits = onlyDigits(value);
-
-  if (!digits) {
-    return "";
-  }
-
-  return new Intl.NumberFormat("id-ID").format(
-    Number(digits),
-  );
-}
-
-function formatRupiah(value) {
-  return new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
-    maximumFractionDigits: 0,
-  }).format(Number(value ?? 0));
-}
-
-function preparePeopleRows(
-  rows,
-  idField,
-) {
-  return (Array.isArray(rows) ? rows : [])
-    .map((row) => ({
-      nama:
-        String(row?.nama ?? "").trim(),
-
-      [idField]:
-        idField === "nim"
-          ? normalizeNim(row?.[idField])
-          : onlyDigits(row?.[idField]),
-    }))
-    .filter(
-      (row) =>
-        row.nama ||
-        row[idField],
-    );
-}
-
-function normalizePeopleRows(
-  jsonRows,
-  legacyText,
-  idField,
-) {
-  if (
-    Array.isArray(jsonRows) &&
-    jsonRows.length > 0
-  ) {
-    const normalizedRows = jsonRows
-      .map((row) => ({
-        nama:
-          String(row?.nama ?? "").trim(),
-
-        [idField]:
-          idField === "nim"
-            ? normalizeNim(
-                row?.[idField],
-              )
-            : onlyDigits(
-                row?.[idField],
-              ),
-      }))
-      .filter(
-        (row) =>
-          row.nama ||
-          row[idField],
-      );
-
-    if (normalizedRows.length > 0) {
-      return normalizedRows;
-    }
-  }
-
-  const legacyItems =
-    String(legacyText ?? "")
-      .split(/\r?\n|;|,/)
-      .map((item) => item.trim())
-      .filter(Boolean);
-
-  if (legacyItems.length > 0) {
-    return legacyItems.map((item) => {
-      const match = item.match(
-        /^(.*?)\s*\(([^)]+)\)\s*$/,
-      );
-
-      if (match) {
-        return {
-          nama:
-            String(match[1] ?? "").trim(),
-
-          [idField]:
-            idField === "nim"
-              ? normalizeNim(match[2])
-              : onlyDigits(match[2]),
-        };
-      }
-
-      if (item.includes("|")) {
-        const [
-          rawName,
-          rawIdentity,
-        ] = item.split("|");
-
-        return {
-          nama:
-            String(rawName ?? "").trim(),
-
-          [idField]:
-            idField === "nim"
-              ? normalizeNim(rawIdentity)
-              : onlyDigits(rawIdentity),
-        };
-      }
-
-      return {
-        nama: item,
-        [idField]: "",
-      };
-    });
-  }
-
-  return [
-    {
-      nama: "",
-      [idField]: "",
-    },
-  ];
-}
-
-function formatPeopleRowsForLegacy(
-  rows,
-  idField,
-) {
-  return (Array.isArray(rows) ? rows : [])
-    .map((row) => {
-      const nama =
-        String(row?.nama ?? "").trim();
-
-      const identitas =
-        String(
-          row?.[idField] ?? "",
-        ).trim();
-
-      if (!nama && !identitas) {
-        return "";
-      }
-
-      if (nama && identitas) {
-        return `${nama} (${identitas})`;
-      }
-
-      return nama || identitas;
-    })
-    .filter(Boolean)
-    .join("\n");
-}
-
-function createAcademicYearOptions() {
-  const currentYear =
-    new Date().getFullYear();
-
-  return Array.from(
-    {
-      length: 14,
-    },
-    (_, index) => {
-      const startYear =
-        currentYear + 3 - index;
-
-      return `${startYear}/${startYear + 1}`;
-    },
-  );
-}
+  "w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-600 focus:ring-4 focus:ring-blue-100";
 
 function findExcelValue(row, possibleHeaders) {
   const normalizedHeaders = possibleHeaders.map(
@@ -2805,46 +2054,15 @@ function normalizeImportedOutputType(value) {
   return outputTypes[normalized] || "";
 }
 
-function parseImportedPeopleRows(
-  value,
-  idField,
-) {
-  const rawItems = String(value ?? "")
+function normalizeImportedPeopleText(value) {
+  return String(value ?? "")
     .split(/\r?\n|;/)
     .map((item) => item.trim())
-    .filter(Boolean);
-
-  return rawItems.map((item) => {
-    const separatorIndex =
-      item.indexOf("|");
-
-    if (separatorIndex === -1) {
-      return {
-        nama: item.trim(),
-        [idField]: "",
-      };
-    }
-
-    const nama =
-      item.slice(0, separatorIndex).trim();
-
-    const rawId =
-      item.slice(separatorIndex + 1).trim();
-
-    return {
-      nama,
-      [idField]:
-        idField === "nim"
-          ? normalizeNim(rawId)
-          : onlyDigits(rawId),
-    };
-  });
+    .filter(Boolean)
+    .join("\n");
 }
 
-function validateImportedOutputRow(
-  row,
-  rowNumber,
-) {
+function validateImportedOutputRow(row, rowNumber) {
   const errors = [];
 
   const jenisKegiatan =
@@ -2876,6 +2094,49 @@ function validateImportedOutputRow(
     );
   }
 
+  const judulLuaran = getExcelText(row, [
+    "Judul Publikasi atau Luaran",
+    "Judul Luaran",
+    "Judul",
+    "judul_luaran",
+  ]);
+
+  if (!judulLuaran) {
+    errors.push(
+      "Judul Publikasi atau Luaran wajib diisi.",
+    );
+  }
+
+  const ketuaKegiatan = getExcelText(row, [
+    "Ketua Kegiatan",
+    "ketua_kegiatan",
+  ]);
+
+  if (!ketuaKegiatan) {
+    errors.push("Ketua Kegiatan wajib diisi.");
+  }
+
+  const semester = normalizeImportedSemester(
+    getExcelText(row, ["Semester", "semester"]),
+  );
+
+  if (!semester) {
+    errors.push(
+      "Semester harus Ganjil atau Genap.",
+    );
+  }
+
+  const tahunAkademik = getExcelText(row, [
+    "Tahun Akademik",
+    "tahun_akademik",
+  ]);
+
+  if (!isValidAcademicYear(tahunAkademik)) {
+    errors.push(
+      "Tahun Akademik harus menggunakan format berurutan, misalnya 2026/2027.",
+    );
+  }
+
   const yearValue = findExcelValue(row, [
     "Tahun Terbit",
     "Tahun Terbit atau Luaran",
@@ -2899,120 +2160,27 @@ function validateImportedOutputRow(
     );
   }
 
-  const semester =
-    normalizeImportedSemester(
-      getExcelText(row, [
-        "Semester",
-        "semester",
-      ]),
-    );
-
-  if (!semester) {
-    errors.push(
-      "Semester harus Ganjil atau Genap.",
-    );
-  }
-
-  const tahunAkademik = getExcelText(row, [
-    "Tahun Akademik",
-    "tahun_akademik",
-  ]);
-
-  if (!isValidAcademicYear(tahunAkademik)) {
-    errors.push(
-      "Tahun Akademik harus menggunakan format berurutan, misalnya 2026/2027.",
-    );
-  }
-
-  const judulLuaran = getExcelText(row, [
-    "Judul Publikasi atau Luaran",
-    "Judul Luaran",
-    "Judul",
-    "judul_luaran",
-  ]);
-
-  if (!judulLuaran) {
-    errors.push(
-      "Judul Publikasi atau Luaran wajib diisi.",
-    );
-  }
-
-  const ketuaKegiatan = getExcelText(row, [
-    "Ketua Kegiatan",
-    "ketua_kegiatan",
-  ]);
-
-  if (!ketuaKegiatan) {
-    errors.push(
-      "Ketua Kegiatan wajib diisi.",
-    );
-  }
-
-  const ketuaIdentitas = onlyDigits(
-    getExcelText(row, [
-      "NIDN/NUPTK/NIP Ketua",
-      "Identitas Ketua",
-      "ketua_identitas",
+  const anggotaDosen = normalizeImportedPeopleText(
+    findExcelValue(row, [
+      "Anggota Dosen",
+      "anggota_dosen",
     ]),
   );
 
-  if (!ketuaIdentitas) {
-    errors.push(
-      "NIDN/NUPTK/NIP Ketua wajib diisi dengan angka.",
-    );
-  }
-
-  const anggotaDosenData =
-    parseImportedPeopleRows(
-      findExcelValue(row, [
-        "Anggota Dosen",
-        "anggota_dosen",
-      ]),
-      "identitas",
-    );
-
-  const anggotaTidakLengkap =
-    anggotaDosenData.some(
-      (anggota) =>
-        !anggota.nama ||
-        !anggota.identitas,
-    );
-
-  if (anggotaTidakLengkap) {
-    errors.push(
-      "Anggota Dosen harus menggunakan format Nama|NIDN/NUPTK/NIP.",
-    );
-  }
-
-  const mahasiswaData =
-    parseImportedPeopleRows(
+  const mahasiswaTerlibat =
+    normalizeImportedPeopleText(
       findExcelValue(row, [
         "Mahasiswa Terlibat",
         "Mahasiswa",
         "mahasiswa_terlibat",
       ]),
-      "nim",
     );
 
-  const mahasiswaTidakLengkap =
-    mahasiswaData.some(
-      (item) =>
-        !item.nama ||
-        !item.nim,
-    );
-
-  if (mahasiswaTidakLengkap) {
-    errors.push(
-      "Mahasiswa harus menggunakan format Nama|NIM.",
-    );
-  }
-
-  const namaJurnalPenerbit =
-    getExcelText(row, [
-      "Nama Jurnal atau Penerbit",
-      "Nama Jurnal/Penerbit",
-      "nama_jurnal_penerbit",
-    ]);
+  const namaJurnalPenerbit = getExcelText(row, [
+    "Nama Jurnal atau Penerbit",
+    "Nama Jurnal/Penerbit",
+    "nama_jurnal_penerbit",
+  ]);
 
   const volumeNomor = getExcelText(row, [
     "Volume dan Nomor",
@@ -3032,30 +2200,10 @@ function validateImportedOutputRow(
     "nomor_hki_isbn",
   ]);
 
-  const sumberDana = getExcelText(row, [
-    "Sumber Dana",
-    "sumber_dana",
-  ]);
-
-  const jumlahDanaRaw = findExcelValue(row, [
-    "Jumlah Dana",
-    "Pendanaan",
-    "jumlah_dana",
-  ]);
-
-  const jumlahDanaDigits =
-    onlyDigits(jumlahDanaRaw);
-
-  const jumlahDana =
-    jumlahDanaDigits
-      ? Number(jumlahDanaDigits)
-      : 0;
-
-  const jenisIndikatorText =
-    getExcelText(row, [
-      "Jenis Indikator",
-      "jenis_indikator",
-    ]).toUpperCase();
+  const jenisIndikatorText = getExcelText(row, [
+    "Jenis Indikator",
+    "jenis_indikator",
+  ]).toUpperCase();
 
   const jenisIndikator =
     jenisIndikatorText === "IKU" ||
@@ -3083,9 +2231,7 @@ function validateImportedOutputRow(
   ]);
 
   if (!linkBukti) {
-    errors.push(
-      "Link Bukti wajib diisi.",
-    );
+    errors.push("Link Bukti wajib diisi.");
   } else if (!isValidHttpUrl(linkBukti)) {
     errors.push(
       "Link Bukti harus diawali http:// atau https://.",
@@ -3097,42 +2243,22 @@ function validateImportedOutputRow(
     valid: errors.length === 0,
     errors,
     data: {
-      jenis_kegiatan:
-        jenisKegiatan,
-      jenis_luaran:
-        jenisLuaran,
+      jenis_kegiatan: jenisKegiatan,
+      jenis_luaran: jenisLuaran,
+      judul_luaran: judulLuaran,
       tahun,
+      ketua_kegiatan: ketuaKegiatan,
+      anggota_dosen: anggotaDosen,
+      mahasiswa_terlibat: mahasiswaTerlibat,
       semester,
-      tahun_akademik:
-        tahunAkademik,
-      judul_luaran:
-        judulLuaran,
-      ketua_kegiatan:
-        ketuaKegiatan,
-      ketua_identitas:
-        ketuaIdentitas,
-      anggota_dosen_data:
-        anggotaDosenData,
-      mahasiswa_data:
-        mahasiswaData,
-      nama_jurnal_penerbit:
-        namaJurnalPenerbit,
-      volume_nomor:
-        volumeNomor,
-      doi_url:
-        doiUrl,
-      nomor_hki_isbn:
-        nomorHkiIsbn,
-      sumber_dana:
-        sumberDana,
-      jumlah_dana:
-        jumlahDana,
-      jenis_indikator:
-        jenisIndikator,
-      kode_indikator:
-        kodeIndikator,
-      link_bukti:
-        linkBukti,
+      tahun_akademik: tahunAkademik,
+      nama_jurnal_penerbit: namaJurnalPenerbit,
+      volume_nomor: volumeNomor,
+      doi_url: doiUrl,
+      nomor_hki_isbn: nomorHkiIsbn,
+      jenis_indikator: jenisIndikator,
+      kode_indikator: kodeIndikator,
+      link_bukti: linkBukti,
     },
   };
 }

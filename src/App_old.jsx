@@ -148,7 +148,7 @@ function App() {
       <main className="flex min-h-screen items-center justify-center bg-slate-100">
         <div className="rounded-xl bg-white px-8 py-6 shadow">
           <p className="font-medium text-slate-700">
-            Memuat SIMETRI...
+            Memuat SIAKREDI...
           </p>
         </div>
       </main>
@@ -183,18 +183,17 @@ function App() {
           </div>
 
           <span className="w-fit rounded-full bg-white/20 px-4 py-2 text-sm font-semibold">
-            Sistem Informasi Monitoring Evaluasi Tata Kelola dan Repositori Internal
+            Sistem Informasi Akreditasi Internal
           </span>
 
           <h1 className="mt-8 text-4xl font-bold tracking-tight md:text-5xl">
-            SIMETRI
+            SIAKREDI
           </h1>
 
           <p className="mt-5 max-w-xl text-lg leading-8 text-white/80">
-            Platform monitoring, evaluasi, tata kelola, dan repositori internal
-            untuk data penelitian, pengabdian kepada masyarakat, publikasi,
-            luaran, indikator kinerja, serta siklus PPEPP Program Studi
-            Matematika Universitas Sulawesi Barat.
+            Platform pengelolaan data penelitian, pengabdian kepada
+            masyarakat, publikasi, luaran, indikator kinerja, dan siklus
+            PPEPP Program Studi Matematika Universitas Sulawesi Barat.
           </p>
 
           <div className="mt-10 grid gap-3 text-sm text-blue-50">
@@ -224,7 +223,7 @@ function App() {
                 </h2>
 
                 <p className="mt-2 text-slate-600">
-                  Masukkan email dan kata sandi akun SIMETRI Anda.
+                  Masukkan email dan kata sandi akun SIAKREDI Anda.
                 </p>
               </div>
 
@@ -287,7 +286,7 @@ function App() {
                 >
                   {loginLoading
                     ? "Sedang masuk..."
-                    : "Masuk ke SIMETRI"}
+                    : "Masuk ke SIAKREDI"}
                 </button>
               </form>
 
@@ -310,11 +309,11 @@ function App() {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 md:px-6">
           <div>
             <p className="text-xl font-bold text-slate-900">
-              SIMETRI
+              SIAKREDI
             </p>
 
             <p className="text-sm text-slate-500">
-              Sistem Informasi Monitoring Evaluasi Tata Kelola dan Repositori Internal
+              Sistem Penjaminan Mutu Internal
             </p>
           </div>
 

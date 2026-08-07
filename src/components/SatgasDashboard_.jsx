@@ -1079,7 +1079,7 @@ function SatgasDashboard() {
             doc.setTextColor(100);
 
             doc.text(
-                "SIMETRI Program Studi Matematika",
+                "SIAKRED Program Studi Matematika",
                 10,
                 pageHeight - 7,
             );

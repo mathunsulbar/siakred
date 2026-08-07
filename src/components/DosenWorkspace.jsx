@@ -15,7 +15,7 @@ function DosenWorkspace({ userId }) {
             onClick={() => setActiveTab("kegiatan")}
             className={`rounded-xl px-4 py-3 text-sm font-semibold transition ${
               activeTab === "kegiatan"
-                ? "bg-blue-600 text-white"
+                ? "bg-[#000080] text-white"
                 : "text-slate-600 hover:bg-slate-100"
             }`}
           >
@@ -27,7 +27,7 @@ function DosenWorkspace({ userId }) {
             onClick={() => setActiveTab("luaran")}
             className={`rounded-xl px-4 py-3 text-sm font-semibold transition ${
               activeTab === "luaran"
-                ? "bg-blue-600 text-white"
+                ? "bg-[#000080] text-white"
                 : "text-slate-600 hover:bg-slate-100"
             }`}
           >

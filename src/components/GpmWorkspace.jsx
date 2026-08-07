@@ -18,7 +18,7 @@ function GpmWorkspace({ userId }) {
             }
             className={`rounded-xl px-4 py-3 text-sm font-semibold transition ${
               activeTab === "verifikasi"
-                ? "bg-blue-600 text-white"
+                ? "bg-[#000080] text-white"
                 : "text-slate-600 hover:bg-slate-100"
             }`}
           >
@@ -32,7 +32,7 @@ function GpmWorkspace({ userId }) {
             }
             className={`rounded-xl px-4 py-3 text-sm font-semibold transition ${
               activeTab === "ppepp"
-                ? "bg-blue-600 text-white"
+                ? "bg-[#000080] text-white"
                 : "text-slate-600 hover:bg-slate-100"
             }`}
           >
@@ -44,7 +44,7 @@ function GpmWorkspace({ userId }) {
             onClick={() => setActiveTab("riwayat")}
             className={`rounded-xl px-4 py-3 text-sm font-semibold transition ${
               activeTab === "riwayat"
-                ? "bg-blue-600 text-white"
+                ? "bg-[#000080] text-white"
                 : "text-slate-600 hover:bg-slate-100"
             }`}
           >

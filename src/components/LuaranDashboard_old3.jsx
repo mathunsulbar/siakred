@@ -391,7 +391,7 @@ function LuaranDashboard({ userId }) {
       ["PETUNJUK IMPORT PUBLIKASI DAN LUARAN"],
       ["1. Jangan mengubah nama kolom pada sheet Publikasi dan Luaran."],
       ["2. Asal Kegiatan diisi Penelitian atau PkM."],
-      ["3. Jenis Luaran mengikuti pilihan pada formulir SIMETRI."],
+      ["3. Jenis Luaran mengikuti pilihan pada formulir SIAKRED."],
       ["4. Semester diisi Ganjil atau Genap."],
       ["5. Format Tahun Akademik: 2026/2027."],
       ["6. NIDN/NUPTK/NIP Ketua wajib berupa angka."],
@@ -614,7 +614,7 @@ function LuaranDashboard({ userId }) {
     }
 
     const confirmed = window.confirm(
-      `Simpan ${validRows.length} data valid ke SIMETRI dengan status Pending?`,
+      `Simpan ${validRows.length} data valid ke SIAKRED dengan status Pending?`,
     );
 
     if (!confirmed) {
