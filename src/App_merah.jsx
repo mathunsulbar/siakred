@@ -198,20 +198,17 @@ function App() {
           </p>
 
           <div className="mt-10 grid gap-3 text-sm text-rose-50">
-            <FeatureCardCompact
-              icon="research"
-              title="Pengelolaan penelitian dan pengabdian kepada masyarakat"
-            />
+            <div className="rounded-xl border border-white/10 bg-white/10 p-4">
+              Pengelolaan penelitian dan pengabdian kepada masyarakat
+            </div>
 
-            <FeatureCardCompact
-              icon="publication"
-              title="Pengelolaan publikasi dan luaran dosen"
-            />
+            <div className="rounded-xl border border-white/10 bg-white/10 p-4">
+              Pengelolaan publikasi dan luaran dosen
+            </div>
 
-            <FeatureCardCompact
-              icon="verification"
-              title="Verifikasi bukti dan pemantauan capaian PPEPP"
-            />
+            <div className="rounded-xl border border-white/10 bg-white/10 p-4">
+              Verifikasi bukti dan pemantauan capaian PPEPP
+            </div>
           </div>
         </section>
 
@@ -394,80 +391,6 @@ function App() {
         )}
       </div>
     </main>
-  );
-}
-
-
-function FeatureCardCompact({ icon, title }) {
-  return (
-    <div className="relative rounded-xl border border-white/10 bg-white/10 p-4 pl-16 text-white">
-      <div className="absolute left-4 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-lg bg-white shadow-sm">
-        <FeatureIconCompact type={icon} />
-      </div>
-
-      <span className="block leading-5">
-        {title}
-      </span>
-    </div>
-  );
-}
-
-function FeatureIconCompact({ type }) {
-  const iconClassName = "h-[18px] w-[18px] text-[#C5163A]";
-
-  if (type === "publication") {
-    return (
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className={iconClassName}
-        aria-hidden="true"
-      >
-        <path d="M3 5.5A3.5 3.5 0 0 1 6.5 2H11v17H6.5A3.5 3.5 0 0 0 3 22.5v-17Z" />
-        <path d="M21 5.5A3.5 3.5 0 0 0 17.5 2H13v17h4.5a3.5 3.5 0 0 1 3.5 3.5v-17Z" />
-      </svg>
-    );
-  }
-
-  if (type === "verification") {
-    return (
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className={iconClassName}
-        aria-hidden="true"
-      >
-        <path d="M12 22s8-3.5 8-10V5l-8-3-8 3v7c0 6.5 8 10 8 10Z" />
-        <path d="m9 12 2 2 4-4" />
-      </svg>
-    );
-  }
-
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={iconClassName}
-      aria-hidden="true"
-    >
-      <rect x="4" y="5" width="16" height="16" rx="2" />
-      <path d="M9 3h6v4H9z" />
-      <path d="M8 17v-4" />
-      <path d="M12 17v-7" />
-      <path d="M16 17v-2" />
-    </svg>
   );
 }
 
