@@ -84,7 +84,6 @@ function DosenDashboard({ userId }) {
   const [loadingData, setLoadingData] = useState(true);
   const [saving, setSaving] = useState(false);
   const [openingFile, setOpeningFile] = useState(null);
-  const [deletingId, setDeletingId] = useState(null);
 
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
@@ -735,83 +734,6 @@ function DosenDashboard({ userId }) {
     setEvidenceFile(null);
     setExistingEvidencePath(null);
     setFileInputKey((current) => current + 1);
-  }
-
-  async function handleDelete(activity) {
-    if (
-      !activity ||
-      !["pending", "rejected"].includes(
-        activity.status_gpm,
-      )
-    ) {
-      return;
-    }
-
-    const confirmed = window.confirm(
-      `Hapus permanen data "${activity.judul}"?\n\nTindakan ini tidak dapat dibatalkan.`,
-    );
-
-    if (!confirmed) {
-      return;
-    }
-
-    try {
-      setDeletingId(activity.id);
-      setMessage("");
-      setMessageType("");
-
-      const { error } = await supabase
-        .from("kegiatan_tridarma")
-        .delete()
-        .eq("id", activity.id)
-        .eq("dosen_id", userId)
-        .in("status_gpm", ["pending", "rejected"]);
-
-      if (error) {
-        throw error;
-      }
-
-      if (activity.dokumen_bukti_path) {
-        await removeEvidence(
-          activity.dokumen_bukti_path,
-        );
-      }
-
-      if (editingId === activity.id) {
-        resetForm();
-      }
-
-      setMessageType("success");
-      setMessage(
-        "Data kegiatan berhasil dihapus.",
-      );
-
-      await loadActivities();
-    } catch (error) {
-      console.error(
-        "Gagal menghapus kegiatan:",
-        error,
-      );
-
-      setMessageType("error");
-
-      if (
-        error.message?.includes(
-          "row-level security",
-        )
-      ) {
-        setMessage(
-          "Data tidak dapat dihapus. Pastikan kebijakan DELETE Supabase sudah diaktifkan.",
-        );
-      } else {
-        setMessage(
-          error.message ||
-            "Data kegiatan gagal dihapus.",
-        );
-      }
-    } finally {
-      setDeletingId(null);
-    }
   }
 
   function handleEdit(activity) {
@@ -2302,7 +2224,7 @@ try {
                   </td>
 
                   <td className="px-3 py-4">
-                    <div className="flex flex-wrap justify-end gap-2">
+                    <div className="flex justify-end">
                       {activity.status_gpm ===
                         "rejected" && (
                         <button
@@ -2310,10 +2232,7 @@ try {
                           onClick={() =>
                             handleEdit(activity)
                           }
-                          disabled={
-                            deletingId === activity.id
-                          }
-                          className="rounded-lg bg-amber-500 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-600 disabled:opacity-50"
+                          className="rounded-lg bg-amber-500 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-600"
                         >
                           Edit dan Kirim Ulang
                         </button>
@@ -2321,55 +2240,9 @@ try {
 
                       {activity.status_gpm ===
                         "pending" && (
-                        <span className="self-center text-sm text-slate-500">
+                        <span className="text-sm text-slate-500">
                           Menunggu pemeriksaan
                         </span>
-                      )}
-
-                      {["pending", "rejected"].includes(
-                        activity.status_gpm,
-                      ) && (
-                        <button
-                          type="button"
-                          onClick={() =>
-                            handleDelete(activity)
-                          }
-                          disabled={
-                            deletingId === activity.id
-                          }
-                          aria-label="Hapus data"
-                          title="Hapus data"
-                          className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-red-200 bg-red-50 text-red-700 transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-50"
-                        >
-                          {deletingId === activity.id ? (
-                            <svg
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              className="h-4 w-4 animate-spin"
-                              aria-hidden="true"
-                            >
-                              <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" className="opacity-25" />
-                              <path d="M21 12a9 9 0 0 1-9 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                            </svg>
-                          ) : (
-                            <svg
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              className="h-4 w-4"
-                              aria-hidden="true"
-                            >
-                              <path d="M3 6h18" />
-                              <path d="M8 6V4h8v2" />
-                              <path d="M19 6l-1 14H6L5 6" />
-                              <path d="M10 11v5" />
-                              <path d="M14 11v5" />
-                            </svg>
-                          )}
-                        </button>
                       )}
 
                       {activity.status_gpm ===

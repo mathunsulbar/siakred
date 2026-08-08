@@ -99,7 +99,6 @@ function LuaranDashboard({ userId }) {
   const [loadingData, setLoadingData] = useState(true);
   const [saving, setSaving] = useState(false);
   const [openingFile, setOpeningFile] = useState(null);
-  const [deletingId, setDeletingId] = useState(null);
 
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
@@ -911,83 +910,6 @@ function LuaranDashboard({ userId }) {
     setExistingEvidencePath(null);
     setEvidenceFile(null);
     setFileInputKey((current) => current + 1);
-  }
-
-  async function handleDelete(output) {
-    if (
-      !output ||
-      !["pending", "rejected"].includes(
-        output.status_gpm,
-      )
-    ) {
-      return;
-    }
-
-    const confirmed = window.confirm(
-      `Hapus permanen data "${output.judul_luaran}"?\n\nTindakan ini tidak dapat dibatalkan.`,
-    );
-
-    if (!confirmed) {
-      return;
-    }
-
-    try {
-      setDeletingId(output.id);
-      setMessage("");
-      setMessageType("");
-
-      const { error } = await supabase
-        .from("publikasi_dan_luaran")
-        .delete()
-        .eq("id", output.id)
-        .eq("dosen_id", userId)
-        .in("status_gpm", ["pending", "rejected"]);
-
-      if (error) {
-        throw error;
-      }
-
-      if (output.dokumen_bukti_path) {
-        await removeEvidence(
-          output.dokumen_bukti_path,
-        );
-      }
-
-      if (editingId === output.id) {
-        resetForm();
-      }
-
-      setMessageType("success");
-      setMessage(
-        "Data publikasi atau luaran berhasil dihapus.",
-      );
-
-      await loadOutputs();
-    } catch (error) {
-      console.error(
-        "Gagal menghapus publikasi atau luaran:",
-        error,
-      );
-
-      setMessageType("error");
-
-      if (
-        error.message?.includes(
-          "row-level security",
-        )
-      ) {
-        setMessage(
-          "Data tidak dapat dihapus. Pastikan kebijakan DELETE Supabase sudah diaktifkan.",
-        );
-      } else {
-        setMessage(
-          error.message ||
-            "Data publikasi atau luaran gagal dihapus.",
-        );
-      }
-    } finally {
-      setDeletingId(null);
-    }
   }
 
   function handleEdit(output) {
@@ -2288,8 +2210,6 @@ function LuaranDashboard({ userId }) {
         loadOutputs={loadOutputs}
         openEvidence={openEvidence}
         handleEdit={handleEdit}
-        handleDelete={handleDelete}
-        deletingId={deletingId}
       />
     </section>
   );
@@ -2302,8 +2222,6 @@ function OutputHistory({
   loadOutputs,
   openEvidence,
   handleEdit,
-  handleDelete,
-  deletingId,
 }) {
   return (
     <div className="rounded-2xl bg-white p-6 shadow-sm">
@@ -2489,70 +2407,21 @@ function OutputHistory({
                 </td>
 
                 <td className="px-3 py-4">
-                  <div className="flex flex-wrap justify-end gap-2">
+                  <div className="flex justify-end">
                     {output.status_gpm === "rejected" && (
                       <button
                         type="button"
                         onClick={() => handleEdit(output)}
-                        disabled={
-                          deletingId === output.id
-                        }
-                        className="rounded-lg bg-amber-500 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-600 disabled:opacity-50"
+                        className="rounded-lg bg-amber-500 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-600"
                       >
                         Edit dan Kirim Ulang
                       </button>
                     )}
 
                     {output.status_gpm === "pending" && (
-                      <span className="self-center text-sm text-slate-500">
+                      <span className="text-sm text-slate-500">
                         Menunggu pemeriksaan
                       </span>
-                    )}
-
-                    {["pending", "rejected"].includes(
-                      output.status_gpm,
-                    ) && (
-                      <button
-                          type="button"
-                          onClick={() =>
-                            handleDelete(output)
-                          }
-                          disabled={
-                            deletingId === output.id
-                          }
-                          aria-label="Hapus data"
-                          title="Hapus data"
-                          className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-red-200 bg-red-50 text-red-700 transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-50"
-                        >
-                          {deletingId === output.id ? (
-                            <svg
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              className="h-4 w-4 animate-spin"
-                              aria-hidden="true"
-                            >
-                              <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" className="opacity-25" />
-                              <path d="M21 12a9 9 0 0 1-9 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                            </svg>
-                          ) : (
-                            <svg
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              className="h-4 w-4"
-                              aria-hidden="true"
-                            >
-                              <path d="M3 6h18" />
-                              <path d="M8 6V4h8v2" />
-                              <path d="M19 6l-1 14H6L5 6" />
-                              <path d="M10 11v5" />
-                              <path d="M14 11v5" />
-                            </svg>
-                          )}
-                        </button>
                     )}
 
                     {output.status_gpm === "approved" && (

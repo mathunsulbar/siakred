@@ -14,11 +14,26 @@ function App() {
   const [loginLoading, setLoginLoading] = useState(false);
   const [message, setMessage] = useState("");
 
+  const [authMode, setAuthMode] = useState("login");
+  const [registerForm, setRegisterForm] = useState({
+    nama_lengkap: "",
+    email: "",
+    nidn_nip: "",
+    password: "",
+    confirm_password: "",
+  });
+  const [registerLoading, setRegisterLoading] =
+    useState(false);
+  const [registerMessage, setRegisterMessage] =
+    useState("");
+  const [registerMessageType, setRegisterMessageType] =
+    useState("");
+
   async function loadProfile(userId) {
     const { data, error } = await supabase
       .from("user_profiles")
       .select(
-        "user_id, nama_lengkap, nidn_nip, program_studi, app_role",
+        "user_id, nama_lengkap, nidn_nip, program_studi, app_role, status_akun",
       )
       .eq("user_id", userId)
       .single();
@@ -120,6 +135,194 @@ function App() {
     }
   }
 
+  function handleRegisterChange(event) {
+    const { name, value } = event.target;
+
+    setRegisterForm((current) => ({
+      ...current,
+      [name]:
+        name === "nidn_nip"
+          ? value.replace(/\D/g, "")
+          : value,
+    }));
+  }
+
+  function switchAuthMode(mode) {
+    setAuthMode(mode);
+    setMessage("");
+    setRegisterMessage("");
+    setRegisterMessageType("");
+
+    if (mode === "login") {
+      setPassword("");
+    }
+  }
+
+  async function handleRegister(event) {
+    event.preventDefault();
+
+    const namaLengkap =
+      registerForm.nama_lengkap.trim();
+    const registerEmail =
+      registerForm.email.trim().toLowerCase();
+    const identitas =
+      registerForm.nidn_nip.trim();
+
+    setRegisterMessage("");
+    setRegisterMessageType("");
+
+    if (!namaLengkap) {
+      setRegisterMessageType("error");
+      setRegisterMessage(
+        "Nama lengkap wajib diisi.",
+      );
+      return;
+    }
+
+    if (!registerEmail) {
+      setRegisterMessageType("error");
+      setRegisterMessage(
+        "Email wajib diisi.",
+      );
+      return;
+    }
+
+    if (!identitas) {
+      setRegisterMessageType("error");
+      setRegisterMessage(
+        "NIDN/NIP/NUPTK wajib diisi.",
+      );
+      return;
+    }
+
+    if (!/^\d+$/.test(identitas)) {
+      setRegisterMessageType("error");
+      setRegisterMessage(
+        "NIDN/NIP/NUPTK hanya boleh berisi angka.",
+      );
+      return;
+    }
+
+    if (registerForm.password.length < 8) {
+      setRegisterMessageType("error");
+      setRegisterMessage(
+        "Kata sandi minimal 8 karakter.",
+      );
+      return;
+    }
+
+    if (
+      registerForm.password !==
+      registerForm.confirm_password
+    ) {
+      setRegisterMessageType("error");
+      setRegisterMessage(
+        "Konfirmasi kata sandi tidak sama.",
+      );
+      return;
+    }
+
+    try {
+      setRegisterLoading(true);
+
+      const { data, error } =
+        await supabase.auth.signUp({
+          email: registerEmail,
+          password:
+            registerForm.password,
+          options: {
+            data: {
+              nama_lengkap:
+                namaLengkap,
+              nidn_nip:
+                identitas,
+              program_studi:
+                "Matematika",
+              registration_source:
+                "simetri_dosen",
+            },
+          },
+        });
+
+      if (error) {
+        throw error;
+      }
+
+      /*
+       * Setelah pendaftaran, session lokal
+       * ditutup karena akun tetap harus
+       * disetujui Admin GPM sebelum digunakan.
+       */
+      if (data?.session) {
+        await supabase.auth.signOut({
+          scope: "local",
+        });
+      }
+
+      setRegisterForm({
+        nama_lengkap: "",
+        email: "",
+        nidn_nip: "",
+        password: "",
+        confirm_password: "",
+      });
+
+      setRegisterMessageType("success");
+
+      setRegisterMessage(
+        "Pendaftaran berhasil. Akun Anda telah diajukan dan menunggu persetujuan Admin GPM.",
+      );
+    } catch (error) {
+      console.error(
+        "Pendaftaran akun gagal:",
+        error,
+      );
+
+      setRegisterMessageType("error");
+
+      const errorText = String(
+        error?.message || "",
+      ).toLowerCase();
+
+      if (
+        errorText.includes(
+          "already registered",
+        ) ||
+        errorText.includes(
+          "already been registered",
+        )
+      ) {
+        setRegisterMessage(
+          "Email tersebut sudah terdaftar di SIMETRI.",
+        );
+      } else if (
+        errorText.includes("password")
+      ) {
+        setRegisterMessage(
+          "Kata sandi belum memenuhi ketentuan. Gunakan minimal 8 karakter.",
+        );
+      } else if (
+        errorText.includes("invalid email")
+      ) {
+        setRegisterMessage(
+          "Format email belum valid.",
+        );
+      } else if (
+        errorText.includes("rate limit")
+      ) {
+        setRegisterMessage(
+          "Pendaftaran belum dapat diproses saat ini. Silakan coba kembali beberapa saat lagi.",
+        );
+      } else {
+        setRegisterMessage(
+          "Pendaftaran akun belum berhasil. Silakan periksa data dan coba kembali.",
+        );
+      }
+    } finally {
+      setRegisterLoading(false);
+    }
+  }
+
   async function handleLogout() {
     setMessage("");
 
@@ -138,6 +341,7 @@ function App() {
       dosen: "Dosen",
       satgas: "Viewer",
       gpm_reviewer: "Reviewer GPM",
+      gpm_admin: "Admin GPM",
     };
 
     return labels[role] || role || "Belum ditentukan";
@@ -217,92 +421,377 @@ function App() {
 
           <section className="flex items-center p-8 md:p-12">
             <div className="w-full">
-              <div className="mb-8">
-                <p className="text-sm font-semibold uppercase tracking-wider text-[#881337]">
-                  Akses pengguna
-                </p>
+              {authMode === "login" ? (
+                <>
+                  <div className="mb-8">
+                    <p className="text-sm font-semibold uppercase tracking-wider text-[#881337]">
+                      Akses pengguna
+                    </p>
 
-                <h2 className="mt-2 text-3xl font-bold text-slate-900">
-                  Masuk ke sistem
-                </h2>
+                    <h2 className="mt-2 text-3xl font-bold text-slate-900">
+                      Masuk ke sistem
+                    </h2>
 
-                <p className="mt-2 text-slate-600">
-                  Masukkan email dan kata sandi akun SIMETRI Anda.
-                </p>
-              </div>
-
-              <form
-                onSubmit={handleLogin}
-                className="space-y-5"
-              >
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="mb-2 block text-sm font-semibold text-slate-700"
-                  >
-                    Email
-                  </label>
-
-                  <input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(event) =>
-                      setEmail(event.target.value)
-                    }
-                    placeholder="sample@unsulbar.ac.id"
-                    autoComplete="email"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-[#881337] focus:ring-4 focus:ring-[#FFE4E6]"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="password"
-                    className="mb-2 block text-sm font-semibold text-slate-700"
-                  >
-                    Kata sandi
-                  </label>
-
-                  <input
-                    id="password"
-                    type="password"
-                    value={password}
-                    onChange={(event) =>
-                      setPassword(event.target.value)
-                    }
-                    placeholder="Masukkan kata sandi"
-                    autoComplete="current-password"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-[#881337] focus:ring-4 focus:ring-[#FFE4E6]"
-                  />
-                </div>
-
-                {message && (
-                  <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-                    {message}
+                    <p className="mt-2 text-slate-600">
+                      Masukkan email dan kata sandi akun SIMETRI Anda.
+                    </p>
                   </div>
-                )}
 
-                <button
-                  type="submit"
-                  disabled={loginLoading}
-                  className="w-full rounded-xl bg-gradient-to-r from-[#C5163A] via-[#8F1024] to-[#5B000A] px-5 py-3 font-semibold text-white shadow-md transition hover:brightness-95 disabled:cursor-not-allowed disabled:bg-slate-400 disabled:bg-none"
-                >
-                  {loginLoading
-                    ? "Sedang masuk..."
-                    : "Masuk ke SIMETRI"}
-                </button>
-              </form>
+                  <form
+                    onSubmit={handleLogin}
+                    className="space-y-5"
+                  >
+                    <div>
+                      <label
+                        htmlFor="email"
+                        className="mb-2 block text-sm font-semibold text-slate-700"
+                      >
+                        Email
+                      </label>
 
-              <p className="mt-6 text-center text-xs leading-5 text-slate-500">
-                Akun pengguna dikelola oleh administrator Program Studi Matematika
-                <span className="mt-1 block">
-                  Universitas Sulawesi Barat.
-                </span>
-              </p>
+                      <input
+                        id="email"
+                        type="email"
+                        value={email}
+                        onChange={(event) =>
+                          setEmail(
+                            event.target.value,
+                          )
+                        }
+                        placeholder="sample@unsulbar.ac.id"
+                        autoComplete="email"
+                        className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-[#881337] focus:ring-4 focus:ring-[#FFE4E6]"
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="password"
+                        className="mb-2 block text-sm font-semibold text-slate-700"
+                      >
+                        Kata sandi
+                      </label>
+
+                      <input
+                        id="password"
+                        type="password"
+                        value={password}
+                        onChange={(event) =>
+                          setPassword(
+                            event.target.value,
+                          )
+                        }
+                        placeholder="Masukkan kata sandi"
+                        autoComplete="current-password"
+                        className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-[#881337] focus:ring-4 focus:ring-[#FFE4E6]"
+                      />
+                    </div>
+
+                    {message && (
+                      <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                        {message}
+                      </div>
+                    )}
+
+                    {registerMessage &&
+                      registerMessageType ===
+                        "success" && (
+                        <div className="rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm leading-6 text-green-700">
+                          {registerMessage}
+                        </div>
+                      )}
+
+                    <button
+                      type="submit"
+                      disabled={loginLoading}
+                      className="w-full rounded-xl bg-gradient-to-r from-[#C5163A] via-[#8F1024] to-[#5B000A] px-5 py-3 font-semibold text-white shadow-md transition hover:brightness-95 disabled:cursor-not-allowed disabled:bg-slate-400 disabled:bg-none"
+                    >
+                      {loginLoading
+                        ? "Sedang masuk..."
+                        : "Masuk ke SIMETRI"}
+                    </button>
+                  </form>
+
+                  <div className="mt-6 border-t border-slate-200 pt-6 text-center">
+                    <p className="text-sm text-slate-600">
+                      Belum memiliki akun Dosen?
+                    </p>
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        switchAuthMode(
+                          "register",
+                        )
+                      }
+                      className="mt-2 font-semibold text-[#881337] transition hover:text-[#701A35] hover:underline"
+                    >
+                      Daftar Akun Dosen
+                    </button>
+                  </div>
+
+                  <p className="mt-6 text-center text-xs leading-5 text-slate-500">
+                    Akun pengguna dikelola oleh Admin GPM Program Studi Matematika
+                    <span className="mt-1 block">
+                      Universitas Sulawesi Barat.
+                    </span>
+                  </p>
+                </>
+              ) : (
+                <>
+                  <div className="mb-6">
+                    <p className="text-sm font-semibold uppercase tracking-wider text-[#881337]">
+                      Pendaftaran Dosen
+                    </p>
+
+                    <h2 className="mt-2 text-3xl font-bold text-slate-900">
+                      Daftar Akun SIMETRI
+                    </h2>
+
+                    <p className="mt-2 text-sm leading-6 text-slate-600">
+                      Akun baru akan berstatus menunggu dan hanya dapat digunakan setelah disetujui oleh Admin GPM.
+                    </p>
+                  </div>
+
+                  <form
+                    onSubmit={handleRegister}
+                    className="space-y-4"
+                  >
+                    <div>
+                      <label
+                        htmlFor="register-nama"
+                        className="mb-2 block text-sm font-semibold text-slate-700"
+                      >
+                        Nama lengkap
+                        <span className="ml-1 text-red-600">
+                          *
+                        </span>
+                      </label>
+
+                      <input
+                        id="register-nama"
+                        name="nama_lengkap"
+                        type="text"
+                        value={
+                          registerForm.nama_lengkap
+                        }
+                        onChange={
+                          handleRegisterChange
+                        }
+                        placeholder="Nama lengkap dosen"
+                        autoComplete="name"
+                        className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-[#881337] focus:ring-4 focus:ring-[#FFE4E6]"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="register-email"
+                        className="mb-2 block text-sm font-semibold text-slate-700"
+                      >
+                        Email
+                        <span className="ml-1 text-red-600">
+                          *
+                        </span>
+                      </label>
+
+                      <input
+                        id="register-email"
+                        name="email"
+                        type="email"
+                        value={
+                          registerForm.email
+                        }
+                        onChange={
+                          handleRegisterChange
+                        }
+                        placeholder="nama@unsulbar.ac.id"
+                        autoComplete="email"
+                        className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-[#881337] focus:ring-4 focus:ring-[#FFE4E6]"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="register-identitas"
+                        className="mb-2 block text-sm font-semibold text-slate-700"
+                      >
+                        NIDN/NIP/NUPTK
+                        <span className="ml-1 text-red-600">
+                          *
+                        </span>
+                      </label>
+
+                      <input
+                        id="register-identitas"
+                        name="nidn_nip"
+                        type="text"
+                        inputMode="numeric"
+                        value={
+                          registerForm.nidn_nip
+                        }
+                        onChange={
+                          handleRegisterChange
+                        }
+                        placeholder="Masukkan nomor identitas"
+                        className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-[#881337] focus:ring-4 focus:ring-[#FFE4E6]"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label className="mb-2 block text-sm font-semibold text-slate-700">
+                        Program studi
+                      </label>
+
+                      <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 font-medium text-slate-700">
+                        Matematika
+                      </div>
+                    </div>
+
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <div>
+                        <label
+                          htmlFor="register-password"
+                          className="mb-2 block text-sm font-semibold text-slate-700"
+                        >
+                          Kata sandi
+                          <span className="ml-1 text-red-600">
+                            *
+                          </span>
+                        </label>
+
+                        <input
+                          id="register-password"
+                          name="password"
+                          type="password"
+                          value={
+                            registerForm.password
+                          }
+                          onChange={
+                            handleRegisterChange
+                          }
+                          placeholder="Minimal 8 karakter"
+                          autoComplete="new-password"
+                          minLength="8"
+                          className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-[#881337] focus:ring-4 focus:ring-[#FFE4E6]"
+                          required
+                        />
+                      </div>
+
+                      <div>
+                        <label
+                          htmlFor="register-confirm-password"
+                          className="mb-2 block text-sm font-semibold text-slate-700"
+                        >
+                          Konfirmasi
+                          <span className="ml-1 text-red-600">
+                            *
+                          </span>
+                        </label>
+
+                        <input
+                          id="register-confirm-password"
+                          name="confirm_password"
+                          type="password"
+                          value={
+                            registerForm.confirm_password
+                          }
+                          onChange={
+                            handleRegisterChange
+                          }
+                          placeholder="Ulangi kata sandi"
+                          autoComplete="new-password"
+                          minLength="8"
+                          className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-[#881337] focus:ring-4 focus:ring-[#FFE4E6]"
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    {registerMessage && (
+                      <div
+                        className={`rounded-xl border px-4 py-3 text-sm leading-6 ${
+                          registerMessageType ===
+                          "success"
+                            ? "border-green-200 bg-green-50 text-green-700"
+                            : "border-red-200 bg-red-50 text-red-700"
+                        }`}
+                      >
+                        {registerMessage}
+                      </div>
+                    )}
+
+                    <button
+                      type="submit"
+                      disabled={registerLoading}
+                      className="w-full rounded-xl bg-gradient-to-r from-[#C5163A] via-[#8F1024] to-[#5B000A] px-5 py-3 font-semibold text-white shadow-md transition hover:brightness-95 disabled:cursor-not-allowed disabled:bg-slate-400 disabled:bg-none"
+                    >
+                      {registerLoading
+                        ? "Mendaftarkan..."
+                        : "Daftar Akun Dosen"}
+                    </button>
+                  </form>
+
+                  <div className="mt-5 text-center">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        switchAuthMode(
+                          "login",
+                        )
+                      }
+                      className="text-sm font-semibold text-[#881337] transition hover:text-[#701A35] hover:underline"
+                    >
+                      ← Kembali ke halaman masuk
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           </section>
         </div>
+      </main>
+    );
+  }
+
+  if (
+    session &&
+    profile?.status_akun &&
+    profile.status_akun !== "active"
+  ) {
+    const isRejected =
+      profile.status_akun === "rejected";
+
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-slate-100 px-4">
+        <section className="w-full max-w-xl rounded-3xl bg-white p-8 text-center shadow-xl">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#FFF1F2] text-2xl font-bold text-[#881337]">
+            !
+          </div>
+
+          <h1 className="mt-6 text-2xl font-bold text-slate-900">
+            {isRejected
+              ? "Pendaftaran akun ditolak"
+              : "Akun belum aktif"}
+          </h1>
+
+          <p className="mt-3 leading-7 text-slate-600">
+            {isRejected
+              ? "Permohonan akun Anda belum dapat disetujui. Silakan menghubungi Admin GPM untuk informasi lebih lanjut."
+              : "Akun Anda masih menunggu aktivasi Admin GPM. Akses ke SIMETRI akan tersedia setelah akun disetujui."}
+          </p>
+
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="mt-6 rounded-xl bg-gradient-to-r from-[#C5163A] via-[#8F1024] to-[#5B000A] px-6 py-3 font-semibold text-white shadow-sm transition hover:brightness-95"
+          >
+            Keluar
+          </button>
+        </section>
       </main>
     );
   }
@@ -381,8 +870,14 @@ function App() {
           </div>
         </section>
 
-        {profile?.app_role === "gpm_reviewer" && (
-          <GpmWorkspace userId={session.user.id} />
+        {[
+          "gpm_reviewer",
+          "gpm_admin",
+        ].includes(profile?.app_role) && (
+          <GpmWorkspace
+            userId={session.user.id}
+            appRole={profile?.app_role}
+          />
         )}
 
         {profile?.app_role === "dosen" && (
