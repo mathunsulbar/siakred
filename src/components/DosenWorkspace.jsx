@@ -38,7 +38,7 @@ function DosenWorkspace({ userId }) {
                 onClick={() =>
                   setActiveTab(tab.id)
                 }
-                className={`relative flex items-center gap-3 rounded-xl px-4 py-3 text-left transition ${
+                className={`relative flex min-h-[68px] items-center gap-3 rounded-xl px-3 py-3 text-left transition sm:px-4 ${
                   active
                     ? "bg-gradient-to-r from-[#C5163A] via-[#8F1024] to-[#5B000A] text-white shadow-sm"
                     : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"

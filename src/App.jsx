@@ -827,7 +827,7 @@ function App() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-[#FFF1F2] via-[#FDF2F8] to-[#F8FAFC]">
       <header className="sticky top-0 z-30 border-b border-[#8F1024]/15 bg-white/80 backdrop-blur-xl shadow-sm">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 md:px-6">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-3 py-3 sm:px-4 md:px-6">
           <div className="flex min-w-0 items-center gap-3">
             <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-white p-1.5 shadow-sm">
               <img
@@ -839,7 +839,7 @@ function App() {
 
             <div className="min-w-0">
               <div className="flex items-center gap-2">
-                <p className="text-lg font-black tracking-tight text-slate-950">
+                <p className="text-base font-black tracking-tight text-slate-950 sm:text-lg">
                   SIMETRI
                 </p>
 
@@ -848,7 +848,7 @@ function App() {
                 </span>
               </div>
 
-              <p className="truncate text-xs text-slate-500 sm:text-sm">
+              <p className="max-w-[180px] truncate text-[11px] text-slate-500 sm:max-w-none sm:text-sm">
                 Monitoring Evaluasi Tata Kelola dan Repositori Internal
               </p>
             </div>
@@ -906,7 +906,7 @@ function App() {
         </div>
       </header>
 
-      <div className="mx-auto max-w-7xl px-4 py-6 md:px-6 md:py-8">
+      <div className="mx-auto max-w-7xl px-3 py-5 sm:px-4 md:px-6 md:py-8">
         {message && (
           <div className="mb-6 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
             {message}

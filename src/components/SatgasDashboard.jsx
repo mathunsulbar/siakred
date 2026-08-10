@@ -1163,11 +1163,7 @@ function SatgasDashboard() {
         </button>
       </div>
 
-      {errorMessage && (
-        <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
-          {errorMessage}
-        </div>
-      )}
+      {errorMessage && <InlineNotice type="error">{errorMessage}</InlineNotice>}
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
         <SummaryCard
@@ -1203,8 +1199,8 @@ function SatgasDashboard() {
       </div>
 
       <div className="rounded-3xl border border-[#8F1024]/15 bg-white p-5 shadow-sm sm:p-6">
-        <div className="grid gap-4 md:grid-cols-5">
-          <div className="md:col-span-2">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          <div className="sm:col-span-2 lg:col-span-2">
             <label
               htmlFor="satgas-search"
               className="mb-2 block text-sm font-semibold text-slate-700"
@@ -1588,28 +1584,25 @@ function SatgasDashboard() {
                     </tr>
                 ))}
 
-                {!loading &&
-                    sortedData.length === 0 && (
-                    <tr>
-                        <td
-                        colSpan="14"
-                        className="px-3 py-12 text-center text-slate-500"
-                        >
-                        Tidak ada data yang sesuai filter.
-                        </td>
-                    </tr>
-                    )}
-
-                {loading && (
-                    <tr>
-                    <td
-                        colSpan="14"
-                        className="px-3 py-12 text-center text-slate-500"
-                    >
-                        Memuat rekap data...
+                {!loading && sortedData.length === 0 && (
+                  <tr>
+                    <td colSpan="14" className="px-4 py-8">
+                      <TableEmptyState
+                        title="Tidak ada data yang sesuai filter"
+                        description="Atur ulang pencarian atau filter untuk menampilkan data lain."
+                        actionLabel="Reset Filter"
+                        onAction={() => {
+                          setSearchText("");
+                          setYearFilter("semua");
+                          setDomainFilter("semua");
+                          setStatusFilter("semua");
+                        }}
+                      />
                     </td>
-                    </tr>
+                  </tr>
                 )}
+
+                {loading && <LoadingTableRows colSpan={14} rows={4} />}
                 </tbody>
             </table>
             </div>
@@ -1618,6 +1611,91 @@ function SatgasDashboard() {
       </div>
     </section>
   );
+}
+
+
+function InlineNotice({ type = "info", children }) {
+  const isSuccess = type === "success";
+  const isError = type === "error";
+
+  return (
+    <div
+      className={`flex items-start gap-3 rounded-2xl border p-4 text-sm shadow-sm ${
+        isSuccess
+          ? "border-green-200 bg-green-50 text-green-800"
+          : isError
+            ? "border-red-200 bg-red-50 text-red-800"
+            : "border-amber-200 bg-amber-50 text-amber-800"
+      }`}
+      role="status"
+    >
+      <span
+        className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg font-black ${
+          isSuccess
+            ? "bg-green-100 text-green-700"
+            : isError
+              ? "bg-red-100 text-red-700"
+              : "bg-amber-100 text-amber-700"
+        }`}
+      >
+        {isSuccess ? "✓" : isError ? "!" : "i"}
+      </span>
+      <div className="min-w-0 flex-1 leading-6">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+
+function TableEmptyState({
+  title,
+  description,
+  actionLabel,
+  onAction,
+}) {
+  return (
+    <div className="mx-auto flex max-w-md flex-col items-center py-4 text-center">
+      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#FFF1F2] to-[#FFE4E6] text-[#8F1024] ring-1 ring-[#8F1024]/10">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6" aria-hidden="true">
+          <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h8L20 8.5V18a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V5.5Z" />
+          <path d="M14 3v6h6" />
+          <path d="M8 14h8" />
+          <path d="M8 17h5" />
+        </svg>
+      </div>
+
+      <p className="mt-4 text-sm font-black text-slate-900">{title}</p>
+      <p className="mt-1 text-xs leading-5 text-slate-500">{description}</p>
+
+      {actionLabel && onAction && (
+        <button
+          type="button"
+          onClick={onAction}
+          className="mt-4 rounded-xl bg-gradient-to-r from-[#C5163A] via-[#8F1024] to-[#5B000A] px-4 py-2.5 text-xs font-bold text-white shadow-sm transition hover:brightness-95"
+        >
+          {actionLabel}
+        </button>
+      )}
+    </div>
+  );
+}
+
+function LoadingTableRows({ colSpan, rows = 3 }) {
+  return Array.from({ length: rows }).map((_, index) => (
+    <tr key={`loading-row-${index}`} className="border-b border-[#8F1024]/10">
+      <td colSpan={colSpan} className="px-4 py-3">
+        <div className="flex animate-pulse items-center gap-3">
+          <div className="h-9 w-9 rounded-xl bg-rose-100" />
+          <div className="flex-1 space-y-2">
+            <div className="h-3 w-2/5 rounded-full bg-slate-200" />
+            <div className="h-2.5 w-3/5 rounded-full bg-slate-100" />
+          </div>
+          <div className="hidden h-8 w-24 rounded-xl bg-slate-100 sm:block" />
+        </div>
+      </td>
+    </tr>
+  ));
 }
 
 function FilterField({

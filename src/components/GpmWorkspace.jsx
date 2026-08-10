@@ -90,7 +90,7 @@ function GpmWorkspace({
                 onClick={() =>
                   setActiveTab(tab.id)
                 }
-                className={`relative flex min-w-0 items-center gap-3 rounded-xl px-3.5 py-3 text-left transition ${
+                className={`relative flex min-h-[66px] min-w-0 items-center gap-3 rounded-xl px-3 py-3 text-left transition sm:px-3.5 ${
                   active
                     ? "bg-gradient-to-r from-[#C5163A] via-[#8F1024] to-[#5B000A] shadow-sm"
                     : "hover:bg-slate-50"

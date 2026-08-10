@@ -2393,7 +2393,7 @@ function OutputHistory({
         </button>
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto overscroll-x-contain">
         <table className="w-full min-w-[1050px] border-collapse">
           <thead>
             <tr className="border-b border-[#8F1024]/15">
@@ -2632,30 +2632,113 @@ function OutputHistory({
 
             {!loadingData && outputs.length === 0 && (
               <tr>
-                <td
-                  colSpan="7"
-                  className="px-3 py-10 text-center text-slate-500"
-                >
-                  Belum ada publikasi atau luaran.
+                <td colSpan="7" className="px-4 py-8">
+                  <TableEmptyState
+                    title="Belum ada publikasi atau luaran"
+                    description="Tambahkan publikasi, HKI, buku, prosiding, atau luaran lainnya."
+                    actionLabel="Isi Formulir Luaran"
+                    onAction={() =>
+                      document.getElementById("form-luaran")?.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start",
+                      })
+                    }
+                  />
                 </td>
               </tr>
             )}
 
-            {loadingData && (
-              <tr>
-                <td
-                  colSpan="7"
-                  className="px-3 py-10 text-center text-slate-500"
-                >
-                  Memuat publikasi dan luaran...
-                </td>
-              </tr>
-            )}
+            {loadingData && <LoadingTableRows colSpan={7} rows={3} />}
           </tbody>
         </table>
       </div>
     </div>
   );
+}
+
+
+function InlineNotice({ type = "info", children }) {
+  const isSuccess = type === "success";
+  const isError = type === "error";
+
+  return (
+    <div
+      className={`flex items-start gap-3 rounded-2xl border p-4 text-sm shadow-sm ${
+        isSuccess
+          ? "border-green-200 bg-green-50 text-green-800"
+          : isError
+            ? "border-red-200 bg-red-50 text-red-800"
+            : "border-amber-200 bg-amber-50 text-amber-800"
+      }`}
+      role="status"
+    >
+      <span
+        className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg font-black ${
+          isSuccess
+            ? "bg-green-100 text-green-700"
+            : isError
+              ? "bg-red-100 text-red-700"
+              : "bg-amber-100 text-amber-700"
+        }`}
+      >
+        {isSuccess ? "✓" : isError ? "!" : "i"}
+      </span>
+      <div className="min-w-0 flex-1 leading-6">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+
+function TableEmptyState({
+  title,
+  description,
+  actionLabel,
+  onAction,
+}) {
+  return (
+    <div className="mx-auto flex max-w-md flex-col items-center py-4 text-center">
+      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#FFF1F2] to-[#FFE4E6] text-[#8F1024] ring-1 ring-[#8F1024]/10">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6" aria-hidden="true">
+          <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h8L20 8.5V18a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V5.5Z" />
+          <path d="M14 3v6h6" />
+          <path d="M8 14h8" />
+          <path d="M8 17h5" />
+        </svg>
+      </div>
+
+      <p className="mt-4 text-sm font-black text-slate-900">{title}</p>
+      <p className="mt-1 text-xs leading-5 text-slate-500">{description}</p>
+
+      {actionLabel && onAction && (
+        <button
+          type="button"
+          onClick={onAction}
+          className="mt-4 rounded-xl bg-gradient-to-r from-[#C5163A] via-[#8F1024] to-[#5B000A] px-4 py-2.5 text-xs font-bold text-white shadow-sm transition hover:brightness-95"
+        >
+          {actionLabel}
+        </button>
+      )}
+    </div>
+  );
+}
+
+function LoadingTableRows({ colSpan, rows = 3 }) {
+  return Array.from({ length: rows }).map((_, index) => (
+    <tr key={`loading-row-${index}`} className="border-b border-[#8F1024]/10">
+      <td colSpan={colSpan} className="px-4 py-3">
+        <div className="flex animate-pulse items-center gap-3">
+          <div className="h-9 w-9 rounded-xl bg-rose-100" />
+          <div className="flex-1 space-y-2">
+            <div className="h-3 w-2/5 rounded-full bg-slate-200" />
+            <div className="h-2.5 w-3/5 rounded-full bg-slate-100" />
+          </div>
+          <div className="hidden h-8 w-24 rounded-xl bg-slate-100 sm:block" />
+        </div>
+      </td>
+    </tr>
+  ));
 }
 
 function DashboardStatGrid({ stats }) {
