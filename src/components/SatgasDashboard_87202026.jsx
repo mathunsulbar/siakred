@@ -1137,18 +1137,15 @@ function SatgasDashboard() {
 
   return (
     <section className="mt-6 space-y-6">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#8F1024]">
-            Monitoring & Rekap
-          </p>
-
-          <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-950 md:text-3xl">
+          <h2 className="text-2xl font-bold text-slate-900">
             Dashboard Viewer
           </h2>
 
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
-            Pantau rekap penelitian, publikasi, luaran, pengabdian, pendanaan, dan capaian PPEPP.
+          <p className="mt-1 text-slate-600">
+            Rekap kegiatan penelitian, publikasi dan luaran,
+            serta pengabdian kepada masyarakat.
           </p>
         </div>
 
@@ -1156,9 +1153,8 @@ function SatgasDashboard() {
           type="button"
           onClick={loadData}
           disabled={loading}
-          className="inline-flex items-center gap-2 self-start rounded-xl border border-[#8F1024]/15 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-rose-200 hover:bg-rose-50 hover:text-[#8F1024] disabled:opacity-50 lg:self-auto"
+         className="rounded-lg border border-[#881337] bg-white px-4 py-2 text-sm font-semibold text-[#881337] transition hover:bg-[#881337]/5 disabled:opacity-50"
         >
-          <RefreshIcon />
           {loading ? "Memuat..." : "Perbarui data"}
         </button>
       </div>
@@ -1202,7 +1198,7 @@ function SatgasDashboard() {
         />
       </div>
 
-      <div className="rounded-3xl border border-[#8F1024]/15 bg-white p-5 shadow-sm sm:p-6">
+      <div className="rounded-2xl bg-white p-6 shadow-sm">
         <div className="grid gap-4 md:grid-cols-5">
           <div className="md:col-span-2">
             <label
@@ -1293,7 +1289,7 @@ function SatgasDashboard() {
           <button
             type="button"
             onClick={exportCsv}
-            className="rounded-xl bg-gradient-to-r from-[#C5163A] via-[#8F1024] to-[#5B000A] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:brightness-95"
+            className="rounded-lg bg-gradient-to-r from-[#C5163A] via-[#8F1024] to-[#5B000A] px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:brightness-95"
           >
             Ekspor CSV
           </button>
@@ -1301,7 +1297,7 @@ function SatgasDashboard() {
           <button
             type="button"
             onClick={exportPdf}
-            className="rounded-xl border border-rose-200 bg-[#FFF1F2] px-4 py-2.5 text-sm font-semibold text-[#8F1024] transition hover:bg-rose-100"
+            className="rounded-lg border border-[#881337] bg-white px-4 py-2 text-sm font-semibold text-[#881337] transition hover:bg-[#881337]/5"
           >
             Ekspor PDF
           </button>
@@ -1309,7 +1305,7 @@ function SatgasDashboard() {
         </div>
       </div>
 
-      <div className="rounded-3xl border border-[#8F1024]/15 bg-white p-5 shadow-sm sm:p-6">
+      <div className="rounded-2xl bg-white p-6 shadow-sm">
         <div className="mb-5">
           <h3 className="text-xl font-bold text-slate-900">
             Rekap Penelitian, Publikasi, dan Pengabdian
@@ -1320,19 +1316,10 @@ function SatgasDashboard() {
           </p>
         </div>
 
-        <div className="mb-3 flex items-center justify-between gap-3">
-          <p className="text-xs text-slate-500">
-            Geser tabel ke kanan untuk melihat seluruh kolom.
-          </p>
-          <span className="hidden rounded-full bg-slate-100 px-3 py-1 text-[11px] font-semibold text-slate-500 sm:inline-flex">
-            {filteredData.length} data
-          </span>
-        </div>
-
-        <div className="overflow-x-auto overscroll-x-contain rounded-2xl border border-[#8F1024]/15">
+        <div className="overflow-x-auto">
             <table className="w-full min-w-[2400px] border-collapse text-sm">
-                <thead className="bg-slate-50/90">
-                <tr className="border-b border-[#8F1024]/15">
+                <thead>
+                <tr className="border-b border-slate-200">
                     <TableHeading
                     sortKey="year"
                     sortConfig={sortConfig}
@@ -1650,26 +1637,6 @@ function FilterField({
   );
 }
 
-function RefreshIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="h-4 w-4"
-      aria-hidden="true"
-    >
-      <path d="M20 6v6h-6" />
-      <path d="M4 18v-6h6" />
-      <path d="M5.5 9A7 7 0 0 1 17 5l3 3" />
-      <path d="m4 16 3 3a7 7 0 0 0 11.5-4" />
-    </svg>
-  );
-}
-
 function SummaryCard({
   title,
   value,
@@ -1777,7 +1744,7 @@ function StatusBadge({ status }) {
     <span
       className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold ${
         styles[status] ??
-        "border-[#8F1024]/15 bg-slate-50 text-slate-600"
+        "border-slate-200 bg-slate-50 text-slate-600"
       }`}
     >
       {getStatusLabel(status)}

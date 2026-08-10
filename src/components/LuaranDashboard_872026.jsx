@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import * as XLSX from "xlsx";
 import { supabase } from "../lib/supabase";
 
@@ -1432,23 +1432,6 @@ function LuaranDashboard({ userId }) {
     }
   }
 
-  const dashboardStats = useMemo(() => {
-    const rows = outputs ?? [];
-
-    return {
-      total: rows.length,
-      pending: rows.filter(
-        (item) => item.status_gpm === "pending",
-      ).length,
-      approved: rows.filter(
-        (item) => item.status_gpm === "approved",
-      ).length,
-      rejected: rows.filter(
-        (item) => item.status_gpm === "rejected",
-      ).length,
-    };
-  }, [outputs]);
-
   const validImportCount = importPreview.filter(
     (row) => row.valid,
   ).length;
@@ -1458,36 +1441,18 @@ function LuaranDashboard({ userId }) {
 
   return (
     <section className="space-y-6">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#8F1024]">
-            Repositori Luaran
-          </p>
+      <div>
+        <h2 className="text-2xl font-bold text-slate-900">
+          Publikasi dan Luaran
+        </h2>
 
-          <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-950 md:text-3xl">
-            Publikasi & Luaran
-          </h2>
-
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
-            Kelola publikasi, HKI, buku, prosiding, serta luaran penelitian dan pengabdian.
-          </p>
-        </div>
-
-        <button
-          type="button"
-          onClick={loadOutputs}
-          disabled={loadingData}
-          className="inline-flex items-center justify-center gap-2 self-start rounded-xl border border-[#8F1024]/15 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-rose-200 hover:bg-rose-50 hover:text-[#8F1024] disabled:opacity-50 lg:self-auto"
-        >
-          <RefreshIcon />
-          {loadingData ? "Memuat..." : "Perbarui data"}
-        </button>
+        <p className="mt-1 text-slate-600">
+          Tambahkan publikasi, HKI, buku, prosiding,
+          produk penelitian, atau produk PkM.
+        </p>
       </div>
 
-      <DashboardStatGrid stats={dashboardStats} />
-
-      <div className="relative overflow-hidden rounded-3xl border border-[#8F1024]/15 bg-gradient-to-br from-[#FFF1F2] via-white to-[#FFF8F8] p-6 shadow-sm">
-        <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#C5163A] via-[#8F1024] to-[#5B000A]" />
+      <div className="rounded-2xl border border-[#881337]/10 bg-white p-6 shadow-sm">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div>
             <h3 className="mt-1 text-xl font-bold text-slate-900">
@@ -1549,10 +1514,10 @@ function LuaranDashboard({ userId }) {
           <div
             className={`mt-4 rounded-xl border p-4 text-sm ${
               importMessageType === "success"
-                ? "border-green-200/80 bg-green-50 text-green-700"
+                ? "border-green-200 bg-green-50 text-green-700"
                 : importMessageType === "warning"
-                  ? "border-amber-200/80 bg-amber-50 text-amber-700"
-                  : "border-red-200/80 bg-red-50 text-red-700"
+                  ? "border-amber-200 bg-amber-50 text-amber-700"
+                  : "border-red-200 bg-red-50 text-red-700"
             }`}
           >
             {importMessage}
@@ -1563,7 +1528,7 @@ function LuaranDashboard({ userId }) {
           <div className="mt-5 space-y-4">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex flex-wrap gap-2 text-sm">
-                <span className="rounded-full border border-[#8F1024]/15 bg-slate-50 px-3 py-1 font-semibold text-slate-700">
+                <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 font-semibold text-slate-700">
                   Total: {importPreview.length}
                 </span>
 
@@ -1601,10 +1566,10 @@ function LuaranDashboard({ userId }) {
               </div>
             </div>
 
-            <div className="max-h-[480px] overflow-auto rounded-xl border border-[#8F1024]/15">
+            <div className="max-h-[480px] overflow-auto rounded-xl border border-slate-200">
               <table className="w-full min-w-[1500px] border-collapse text-sm">
                 <thead className="sticky top-0 bg-slate-100">
-                  <tr className="border-b border-[#8F1024]/15">
+                  <tr className="border-b border-slate-200">
                     <TableHeading>Baris</TableHeading>
                     <TableHeading>Status</TableHeading>
                     <TableHeading>Asal</TableHeading>
@@ -1621,7 +1586,7 @@ function LuaranDashboard({ userId }) {
                   {importPreview.map((row) => (
                     <tr
                       key={`import-luaran-${row.rowNumber}`}
-                      className="border-b border-slate-100 align-top transition hover:bg-[#FFF6F7]"
+                      className="border-b border-slate-100 align-top"
                     >
                       <td className="whitespace-nowrap px-3 py-3 font-semibold text-slate-700">
                         {row.rowNumber}
@@ -1631,8 +1596,8 @@ function LuaranDashboard({ userId }) {
                         <span
                           className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold ${
                             row.valid
-                              ? "border-green-200/80 bg-green-50 text-green-700"
-                              : "border-red-200/80 bg-red-50 text-red-700"
+                              ? "border-green-200 bg-green-50 text-green-700"
+                              : "border-red-200 bg-red-50 text-red-700"
                           }`}
                         >
                           {row.valid ? "Valid" : "Periksa"}
@@ -1712,7 +1677,7 @@ function LuaranDashboard({ userId }) {
 
       <div
         id="form-luaran"
-        className="scroll-mt-6 rounded-3xl border border-[#8F1024]/15 bg-gradient-to-b from-[#FFF9FA] to-white p-5 shadow-sm sm:p-6"
+        className="scroll-mt-6 rounded-2xl bg-white p-6 shadow-sm"
       >
         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
@@ -1738,8 +1703,8 @@ function LuaranDashboard({ userId }) {
           <div
             className={`mb-6 rounded-xl border p-4 text-sm ${
               messageType === "success"
-                ? "border-green-200/80 bg-green-50 text-green-700"
-                : "border-red-200/80 bg-red-50 text-red-700"
+                ? "border-green-200 bg-green-50 text-green-700"
+                : "border-red-200 bg-red-50 text-red-700"
             }`}
           >
             {message}
@@ -1750,12 +1715,6 @@ function LuaranDashboard({ userId }) {
           onSubmit={handleSubmit}
           className="grid gap-5 md:grid-cols-2"
         >
-          <FormSectionHeader
-            number="1"
-            title="Informasi Luaran"
-            description="Tentukan asal kegiatan, jenis luaran, periode, dan judul."
-          />
-
           <FormField
             label="Asal kegiatan"
             htmlFor="luaran_jenis_kegiatan"
@@ -1892,12 +1851,6 @@ function LuaranDashboard({ userId }) {
             </FormField>
           </div>
 
-          <FormSectionHeader
-            number="2"
-            title="Pelaksana"
-            description="Lengkapi ketua, anggota dosen, dan mahasiswa yang terlibat."
-          />
-
           <FormField
             label="Ketua kegiatan"
             htmlFor="ketua_kegiatan_luaran"
@@ -1967,7 +1920,7 @@ function LuaranDashboard({ userId }) {
                 (anggota, index) => (
                   <div
                     key={`luaran-anggota-${index}`}
-                    className="grid gap-3 rounded-xl border border-[#8F1024]/15 bg-slate-50 p-4 md:grid-cols-[1fr_1fr_auto]"
+                    className="grid gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 md:grid-cols-[1fr_1fr_auto]"
                   >
                     <input
                       type="text"
@@ -2044,7 +1997,7 @@ function LuaranDashboard({ userId }) {
                 (mahasiswa, index) => (
                   <div
                     key={`luaran-mahasiswa-${index}`}
-                    className="grid gap-3 rounded-xl border border-[#8F1024]/15 bg-slate-50 p-4 md:grid-cols-[1fr_1fr_auto]"
+                    className="grid gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 md:grid-cols-[1fr_1fr_auto]"
                   >
                     <input
                       type="text"
@@ -2093,12 +2046,6 @@ function LuaranDashboard({ userId }) {
               )}
             </div>
           </div>
-
-          <FormSectionHeader
-            number="3"
-            title="Identitas Publikasi / Luaran"
-            description="Isi detail jurnal, penerbit, DOI, HKI, paten, atau ISBN sesuai jenis luaran."
-          />
 
           <FormField
             label="Nama jurnal atau penerbit"
@@ -2159,12 +2106,6 @@ function LuaranDashboard({ userId }) {
               className={inputClassName}
             />
           </FormField>
-
-          <FormSectionHeader
-            number="4"
-            title="Pendanaan & Indikator"
-            description="Catat pendanaan dan keterkaitan luaran dengan indikator kinerja."
-          />
 
           <FormField
             label="Sumber dana"
@@ -2240,12 +2181,6 @@ function LuaranDashboard({ userId }) {
           </FormField>
 
           <div className="md:col-span-2">
-            <FormSectionHeader
-              number="5"
-              title="Bukti Pendukung"
-              description="Sertakan tautan bukti wajib dan dokumen tambahan bila tersedia."
-            />
-
             <FormField
               label="Link bukti"
               htmlFor="link_bukti_luaran"
@@ -2371,7 +2306,7 @@ function OutputHistory({
   deletingId,
 }) {
   return (
-    <div className="rounded-3xl border border-[#8F1024]/15 bg-white p-6 shadow-sm">
+    <div className="rounded-2xl bg-white p-6 shadow-sm">
       <div className="mb-5 flex items-center justify-between">
         <div>
           <h3 className="text-xl font-bold text-slate-900">
@@ -2396,7 +2331,7 @@ function OutputHistory({
       <div className="overflow-x-auto">
         <table className="w-full min-w-[1050px] border-collapse">
           <thead>
-            <tr className="border-b border-[#8F1024]/15">
+            <tr className="border-b border-slate-200">
               <TableHeading>Jenis</TableHeading>
               <TableHeading>Judul</TableHeading>
               <TableHeading>Tahun</TableHeading>
@@ -2413,7 +2348,7 @@ function OutputHistory({
             {outputs.map((output) => (
               <tr
                 key={output.id}
-                className="border-b border-slate-100 align-top transition hover:bg-[#FFF6F7]"
+                className="border-b border-slate-100 align-top"
               >
                 <td className="px-3 py-4">
                   <p className="font-medium text-slate-900">
@@ -2658,121 +2593,6 @@ function OutputHistory({
   );
 }
 
-function DashboardStatGrid({ stats }) {
-  const cards = [
-    {
-      label: "Total Data",
-      value: stats.total,
-      note: "Seluruh pengajuan",
-      tone: "slate",
-    },
-    {
-      label: "Menunggu",
-      value: stats.pending,
-      note: "Menunggu GPM",
-      tone: "amber",
-    },
-    {
-      label: "Disetujui",
-      value: stats.approved,
-      note: "Telah tervalidasi",
-      tone: "green",
-    },
-    {
-      label: "Perlu Revisi",
-      value: stats.rejected,
-      note: "Perlu diperbaiki",
-      tone: "red",
-    },
-  ];
-
-  return (
-    <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-      {cards.map((card) => (
-        <article
-          key={card.label}
-          className="group relative overflow-hidden rounded-2xl border border-[#8F1024]/15 bg-gradient-to-br from-[#FFF7F7] to-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
-        >
-          <div
-            className={`absolute inset-x-0 top-0 h-0.5 ${
-              card.tone === "green"
-                ? "bg-green-500"
-                : card.tone === "amber"
-                  ? "bg-amber-500"
-                  : card.tone === "red"
-                    ? "bg-red-500"
-                    : "bg-gradient-to-r from-[#C5163A] via-[#8F1024] to-[#5B000A]"
-            }`}
-          />
-
-          <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-            {card.label}
-          </p>
-
-          <div className="mt-2 flex items-end justify-between gap-3">
-            <p className="text-3xl font-black tracking-tight text-slate-950">
-              {card.value}
-            </p>
-
-            <span className="text-xs text-slate-400">
-              {card.note}
-            </span>
-          </div>
-        </article>
-      ))}
-    </div>
-  );
-}
-
-function RefreshIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="h-4 w-4"
-      aria-hidden="true"
-    >
-      <path d="M20 6v6h-6" />
-      <path d="M4 18v-6h6" />
-      <path d="M5.5 9A7 7 0 0 1 17 5l3 3" />
-      <path d="m4 16 3 3a7 7 0 0 0 11.5-4" />
-    </svg>
-  );
-}
-
-
-function FormSectionHeader({
-  title,
-  description,
-  number,
-}) {
-  return (
-    <div className="md:col-span-2">
-      <div className="flex items-start gap-3 border-b border-[#8F1024]/10 pb-3 pt-2">
-        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#FFF1F2] text-xs font-black text-[#8F1024] ring-1 ring-rose-100">
-          {number}
-        </span>
-
-        <div>
-          <p className="text-sm font-black text-slate-900">
-            {title}
-          </p>
-
-          {description && (
-            <p className="mt-0.5 text-xs leading-5 text-slate-500">
-              {description}
-            </p>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function FormField({
   label,
   htmlFor,
@@ -2817,11 +2637,11 @@ function TableHeading({
 function StatusBadge({ status }) {
   const styles = {
     pending:
-      "border-amber-200/80 bg-amber-50 text-amber-700",
+      "border-amber-200 bg-amber-50 text-amber-700",
     approved:
-      "border-green-200/80 bg-green-50 text-green-700",
+      "border-green-200 bg-green-50 text-green-700",
     rejected:
-      "border-red-200/80 bg-red-50 text-red-700",
+      "border-red-200 bg-red-50 text-red-700",
   };
 
   const labels = {
@@ -2834,7 +2654,7 @@ function StatusBadge({ status }) {
     <span
       className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold ${
         styles[status] ??
-        "border-[#8F1024]/15 bg-slate-50 text-slate-600"
+        "border-slate-200 bg-slate-50 text-slate-600"
       }`}
     >
       {labels[status] ?? status}
@@ -2843,7 +2663,7 @@ function StatusBadge({ status }) {
 }
 
 const inputClassName =
-  "w-full rounded-xl border border-[#8F1024]/15 bg-slate-50/60 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 hover:border-slate-300 focus:border-[#9F1239] focus:bg-white focus:ring-4 focus:ring-rose-100";
+  "w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-[#881337] focus:ring-4 focus:ring-[#881337]/10";
 
 function onlyDigits(value) {
   return String(value ?? "").replace(/\D/g, "");

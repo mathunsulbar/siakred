@@ -238,38 +238,17 @@ function UserManagementDashboard({
     }
   }
 
-  const userStats = useMemo(() => {
-    return {
-      total: users.length,
-      active: users.filter(
-        (user) =>
-          user.status_akun === "active",
-      ).length,
-      reviewer: users.filter(
-        (user) =>
-          user.app_role === "gpm_reviewer",
-      ).length,
-      admin: users.filter(
-        (user) =>
-          user.app_role === "gpm_admin",
-      ).length,
-    };
-  }, [users]);
-
   return (
     <section className="space-y-5">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#8F1024]">
-            Super Admin
-          </p>
-
-          <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-950 md:text-3xl">
+          <h2 className="text-2xl font-bold text-slate-900">
             Kelola Pengguna
           </h2>
 
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
-            Atur role, status akun, dan akses pengguna SIMETRI secara terpusat.
+          <p className="mt-1 text-slate-600">
+            Atur status akun dan role pengguna
+            SIMETRI.
           </p>
         </div>
 
@@ -277,18 +256,12 @@ function UserManagementDashboard({
           type="button"
           onClick={loadUsers}
           disabled={loading}
-          className="inline-flex items-center gap-2 self-start rounded-xl border border-[#8F1024]/15 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-rose-200 hover:bg-rose-50 hover:text-[#8F1024] disabled:opacity-50 lg:self-auto"
+          className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 disabled:opacity-50"
         >
-          <RefreshIcon />
-          {loading ? "Memuat..." : "Perbarui data"}
+          {loading
+            ? "Memuat..."
+            : "Perbarui data"}
         </button>
-      </div>
-
-      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <UserStatCard label="Total Pengguna" value={loading ? "..." : userStats.total} tone="brand" />
-        <UserStatCard label="Akun Aktif" value={loading ? "..." : userStats.active} tone="green" />
-        <UserStatCard label="Reviewer GPM" value={loading ? "..." : userStats.reviewer} tone="amber" />
-        <UserStatCard label="Admin GPM" value={loading ? "..." : userStats.admin} tone="red" />
       </div>
 
       {message && (
@@ -303,7 +276,7 @@ function UserManagementDashboard({
         </div>
       )}
 
-      <div className="rounded-2xl border border-[#8F1024]/15 bg-gradient-to-br from-[#FFF7F7] to-white p-4 shadow-sm">
+      <div className="rounded-2xl bg-white p-5 shadow-sm">
         <label
           htmlFor="user-search"
           className="mb-2 block text-sm font-semibold text-slate-700"
@@ -321,15 +294,15 @@ function UserManagementDashboard({
             )
           }
           placeholder="Cari nama, email, identitas, role, atau status..."
-          className="w-full rounded-xl border border-[#8F1024]/15 bg-[#FFF6F7] px-4 py-3 outline-none transition placeholder:text-slate-400 focus:border-[#9F1239] focus:bg-white focus:ring-4 focus:ring-rose-100"
+          className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-[#881337] focus:ring-4 focus:ring-[#881337]/10"
         />
       </div>
 
-      <div className="overflow-hidden rounded-3xl border border-[#8F1024]/15 bg-white shadow-sm">
+      <div className="overflow-hidden rounded-2xl bg-white shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[1180px] border-collapse">
             <thead className="bg-slate-50">
-              <tr className="border-b border-[#8F1024]/15 text-left">
+              <tr className="border-b border-slate-200 text-left">
                 <Heading>No</Heading>
                 <Heading>Pengguna</Heading>
                 <Heading>
@@ -362,7 +335,7 @@ function UserManagementDashboard({
                   return (
                     <tr
                       key={user.user_id}
-                      className="border-b border-slate-100 transition hover:bg-[#FFF6F7]"
+                      className="border-b border-slate-100"
                     >
                       <Cell>
                         {index + 1}
@@ -405,7 +378,7 @@ function UserManagementDashboard({
                             )
                           }
                           disabled={isSelf}
-                          className="w-full rounded-xl border border-[#8F1024]/15 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-[#9F1239] focus:ring-4 focus:ring-rose-100 disabled:bg-slate-100 disabled:text-slate-500"
+                          className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm disabled:bg-slate-100 disabled:text-slate-500"
                         >
                           {ROLE_OPTIONS.map(
                             (option) => (
@@ -441,7 +414,7 @@ function UserManagementDashboard({
                             )
                           }
                           disabled={isSelf}
-                          className="w-full rounded-xl border border-[#8F1024]/15 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-[#9F1239] focus:ring-4 focus:ring-rose-100 disabled:bg-slate-100 disabled:text-slate-500"
+                          className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm disabled:bg-slate-100 disabled:text-slate-500"
                         >
                           {STATUS_OPTIONS.map(
                             (option) => (
@@ -527,54 +500,6 @@ function UserManagementDashboard({
         administratif.
       </p>
     </section>
-  );
-}
-
-function UserStatCard({
-  label,
-  value,
-  tone,
-}) {
-  return (
-    <article className="relative overflow-hidden rounded-2xl border border-[#8F1024]/15 bg-gradient-to-br from-[#FFF7F7] to-white p-4 shadow-sm">
-      <div
-        className={`absolute inset-x-0 top-0 h-0.5 ${
-          tone === "green"
-            ? "bg-green-500"
-            : tone === "amber"
-              ? "bg-amber-500"
-              : tone === "red"
-                ? "bg-red-500"
-                : "bg-gradient-to-r from-[#C5163A] via-[#8F1024] to-[#5B000A]"
-        }`}
-      />
-      <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-        {label}
-      </p>
-      <p className="mt-2 text-3xl font-black tracking-tight text-slate-950">
-        {value}
-      </p>
-    </article>
-  );
-}
-
-function RefreshIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="h-4 w-4"
-      aria-hidden="true"
-    >
-      <path d="M20 6v6h-6" />
-      <path d="M4 18v-6h6" />
-      <path d="M5.5 9A7 7 0 0 1 17 5l3 3" />
-      <path d="m4 16 3 3a7 7 0 0 0 11.5-4" />
-    </svg>
   );
 }
 

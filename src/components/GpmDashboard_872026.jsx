@@ -994,18 +994,15 @@ function GpmDashboard({ canDeleteAll = false }) {
 
   return (
     <section className="mt-6 space-y-6">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#8F1024]">
-            Quality Assurance
-          </p>
-
-          <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-950 md:text-3xl">
-            Verifikasi Dokumen GPM
+          <h2 className="text-2xl font-bold text-slate-900">
+            Dashboard Verifikasi GPM
           </h2>
 
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
-            Periksa detail, bukti, status, dan keputusan verifikasi data penelitian, PkM, serta luaran.
+          <p className="mt-1 text-slate-600">
+            Kelola pemeriksaan penelitian, PkM,
+            luaran, serta siklus PPEPP.
           </p>
         </div>
 
@@ -1013,9 +1010,8 @@ function GpmDashboard({ canDeleteAll = false }) {
           type="button"
           onClick={loadDashboardData}
           disabled={loading}
-          className="inline-flex items-center justify-center gap-2 self-start rounded-xl border border-[#8F1024]/15 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-rose-200 hover:bg-rose-50 hover:text-[#8F1024] disabled:cursor-not-allowed disabled:opacity-60 lg:self-auto"
+          className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          <RefreshIcon />
           {loading
             ? "Memuat..."
             : "Perbarui data"}
@@ -1071,8 +1067,7 @@ function GpmDashboard({ canDeleteAll = false }) {
       </div>
        <PpeppCharts />
 
-      <div className="relative overflow-hidden rounded-3xl border border-[#8F1024]/15 bg-white p-6 shadow-sm">
-        <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#C5163A] via-[#8F1024] to-[#5B000A]" />
+      <div className="rounded-2xl bg-white p-6 shadow-sm">
         <div className="mb-5">
           <h3 className="text-xl font-bold text-slate-900">
             Kelola Dokumen GPM
@@ -1146,7 +1141,7 @@ function GpmDashboard({ canDeleteAll = false }) {
           )}
         </div>
 
-        <div className="mb-4 grid gap-3 rounded-2xl border border-[#8F1024]/15 bg-[#FFF6F7] p-4 md:grid-cols-[180px_1fr] md:items-end">
+        <div className="mb-4 grid gap-3 border-t border-slate-100 pt-4 md:grid-cols-[180px_1fr] md:items-end">
           <div>
             <label
               htmlFor="gpm-page-size"
@@ -1210,8 +1205,8 @@ function GpmDashboard({ canDeleteAll = false }) {
               <col className="w-[95px]" />
               <col className="w-[110px]" />
             </colgroup>
-            <thead className="bg-[#FFF6F7]">
-              <tr className="border-b border-[#8F1024]/15 text-left">
+            <thead>
+              <tr className="border-b border-slate-200 text-left">
                 {canDeleteAll && (
                   <th className="px-2 py-3 text-center">
                     <input
@@ -1305,7 +1300,7 @@ function GpmDashboard({ canDeleteAll = false }) {
                         getItemKey(item),
                       )
                         ? "bg-rose-50/50"
-                        : "hover:bg-[#FFF6F7]"
+                        : "hover:bg-slate-50/70"
                     }`}
                   >
                     {canDeleteAll && (
@@ -1543,11 +1538,9 @@ function GpmDashboard({ canDeleteAll = false }) {
       </div>
 
       {detailItem && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-slate-950/60 p-2 backdrop-blur-[2px] sm:p-4">
-          <div className="max-h-[94vh] w-full max-w-5xl overflow-y-auto rounded-3xl border border-white/20 bg-white shadow-2xl">
-            <div className="sticky top-0 z-10 border-b border-[#8F1024]/15 bg-white/95 backdrop-blur">
-              <div className="h-1 bg-gradient-to-r from-[#C5163A] via-[#8F1024] to-[#5B000A]" />
-              <div className="flex items-start justify-between gap-4 px-5 py-5 sm:px-6">
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-slate-950/55 p-4">
+          <div className="max-h-[92vh] w-full max-w-5xl overflow-y-auto rounded-3xl bg-white shadow-2xl">
+            <div className="sticky top-0 z-10 flex items-start justify-between gap-4 border-b border-slate-200 bg-white px-6 py-5">
               <div>
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="rounded-full border border-[#881337]/20 bg-[#881337]/5 px-3 py-1 text-xs font-semibold text-[#881337]">
@@ -1573,32 +1566,24 @@ function GpmDashboard({ canDeleteAll = false }) {
                 onClick={() =>
                   setDetailItem(null)
                 }
-                className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#8F1024]/15 text-xl text-slate-500 transition hover:bg-slate-50 hover:text-slate-900"
+                className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-200 text-xl text-slate-500 transition hover:bg-slate-50 hover:text-slate-900"
                 aria-label="Tutup detail"
                 title="Tutup"
               >
                 ×
               </button>
-              </div>
             </div>
 
-            <div className="space-y-6 p-4 sm:p-6">
-              <div className="relative overflow-hidden rounded-2xl border border-[#8F1024]/15 bg-[#FFF6F7] p-5">
-                <div className="absolute bottom-0 left-0 top-0 w-1 bg-gradient-to-b from-[#C5163A] via-[#8F1024] to-[#5B000A]" />
-
-                <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
-                  Judul Dokumen
+            <div className="space-y-6 p-6">
+              <div className="rounded-2xl bg-slate-50 p-5">
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  Judul
                 </p>
 
-                <p className="mt-2 text-lg font-bold leading-7 text-slate-950 sm:text-xl">
+                <p className="mt-2 text-lg font-semibold leading-7 text-slate-900">
                   {detailItem.judul}
                 </p>
               </div>
-
-              <DetailSectionTitle
-                title="Informasi Umum"
-                description="Identitas penginput, jenis data, periode, pendanaan, dan indikator."
-              />
 
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 <DetailField
@@ -1685,11 +1670,6 @@ function GpmDashboard({ canDeleteAll = false }) {
                 />
               </div>
 
-              <DetailSectionTitle
-                title="Pelaksana"
-                description="Dosen dan mahasiswa yang tercatat pada kegiatan."
-              />
-
               <div className="grid gap-4 md:grid-cols-2">
                 <DetailTextBlock
                   label="Anggota dosen"
@@ -1710,12 +1690,10 @@ function GpmDashboard({ canDeleteAll = false }) {
 
               {detailItem.sourceTable ===
                 "publikasi_dan_luaran" && (
-                <div className="rounded-2xl border border-[#8F1024]/15 p-5">
-                  <DetailSectionTitle
-                    title="Detail Publikasi / Luaran"
-                    description="Informasi bibliografis dan identitas luaran."
-                    compact
-                  />
+                <div className="rounded-2xl border border-slate-200 p-5">
+                  <h4 className="font-bold text-slate-900">
+                    Detail Publikasi / Luaran
+                  </h4>
 
                   <div className="mt-4 grid gap-4 md:grid-cols-2">
                     <DetailField
@@ -1753,12 +1731,10 @@ function GpmDashboard({ canDeleteAll = false }) {
                 </div>
               )}
 
-              <div className="rounded-2xl border border-[#8F1024]/15 p-5">
-                <DetailSectionTitle
-                  title="Bukti & Verifikasi"
-                  description="Buka bukti pendukung dan lihat status pemeriksaan."
-                  compact
-                />
+              <div className="rounded-2xl border border-slate-200 p-5">
+                <h4 className="font-bold text-slate-900">
+                  Bukti dan Verifikasi
+                </h4>
 
                 <div className="mt-4 flex flex-wrap gap-3">
                   {detailItem.linkBukti ? (
@@ -1768,12 +1744,12 @@ function GpmDashboard({ canDeleteAll = false }) {
                       }
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center rounded-xl bg-gradient-to-r from-[#C5163A] via-[#8F1024] to-[#5B000A] px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:brightness-95"
+                      className="rounded-xl bg-[#881337] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#701A35]"
                     >
                       Buka Link Bukti
                     </a>
                   ) : (
-                    <span className="rounded-xl border border-[#8F1024]/15 bg-slate-50 px-4 py-3 text-sm text-slate-500">
+                    <span className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-500">
                       Link bukti belum tersedia
                     </span>
                   )}
@@ -1830,7 +1806,7 @@ function GpmDashboard({ canDeleteAll = false }) {
               </div>
             </div>
 
-            <div className="sticky bottom-0 flex flex-col gap-3 border-t border-[#8F1024]/15 bg-white px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
+            <div className="sticky bottom-0 flex flex-col gap-3 border-t border-slate-200 bg-white px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm text-slate-500">
                 {detailItem.status ===
                 "pending"
@@ -1865,7 +1841,7 @@ function GpmDashboard({ canDeleteAll = false }) {
                         processingId ===
                         detailItem.id
                       }
-                      className="rounded-xl border border-red-200 bg-red-50 px-5 py-3 text-sm font-semibold text-red-700 transition hover:bg-red-100 disabled:opacity-50"
+                      className="rounded-xl bg-red-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-red-700 disabled:opacity-50"
                     >
                       Tolak
                     </button>
@@ -1898,9 +1874,7 @@ function GpmDashboard({ canDeleteAll = false }) {
 
       {rejectDialogOpen && selectedItem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 p-4">
-          <div className="w-full max-w-lg overflow-hidden rounded-3xl border border-[#8F1024]/15 bg-white shadow-2xl">
-            <div className="h-1 bg-gradient-to-r from-red-500 to-[#9F1239]" />
-            <div className="p-6">
+          <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl">
             <h3 className="text-xl font-bold text-slate-900">
               Tolak Dokumen
             </h3>
@@ -1965,7 +1939,6 @@ function GpmDashboard({ canDeleteAll = false }) {
                 </button>
               </div>
             </form>
-            </div>
           </div>
         </div>
       )}
@@ -2011,36 +1984,13 @@ function SortableTableHeading({
   );
 }
 
-function DetailSectionTitle({
-  title,
-  description,
-  compact = false,
-}) {
-  return (
-    <div className={compact ? "" : "pt-1"}>
-      <div className="flex items-center gap-2">
-        <span className="h-5 w-1 rounded-full bg-[#9F1239]" />
-        <h4 className="font-black text-slate-900">
-          {title}
-        </h4>
-      </div>
-
-      {description && (
-        <p className="mt-1 pl-3 text-xs leading-5 text-slate-500">
-          {description}
-        </p>
-      )}
-    </div>
-  );
-}
-
 function DetailField({
   label,
   value,
   subvalue = "",
 }) {
   return (
-    <div className="rounded-xl border border-[#8F1024]/15 bg-white p-4">
+    <div className="rounded-xl border border-slate-200 bg-white p-4">
       <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
         {label}
       </p>
@@ -2063,7 +2013,7 @@ function DetailTextBlock({
   value,
 }) {
   return (
-    <div className="rounded-xl border border-[#8F1024]/15 p-4">
+    <div className="rounded-xl border border-slate-200 p-4">
       <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
         {label}
       </p>
@@ -2080,119 +2030,20 @@ function SummaryCard({
   value,
   description,
 }) {
-  const tone =
-    title === "Disetujui"
-      ? "green"
-      : title === "Perlu revisi"
-        ? "red"
-        : title === "Antrean verifikasi"
-          ? "amber"
-          : "brand";
-
   return (
-    <article className="group relative overflow-hidden rounded-2xl border border-[#8F1024]/15 bg-gradient-to-br from-[#FFF7F7] to-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
-      <div
-        className={`absolute inset-x-0 top-0 h-0.5 ${
-          tone === "green"
-            ? "bg-green-500"
-            : tone === "red"
-              ? "bg-red-500"
-              : tone === "amber"
-                ? "bg-amber-500"
-                : "bg-gradient-to-r from-[#C5163A] via-[#8F1024] to-[#5B000A]"
-        }`}
-      />
+    <article className="rounded-2xl bg-white p-5 shadow-sm">
+      <p className="text-sm font-medium text-slate-500">
+        {title}
+      </p>
 
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <p className="text-sm font-semibold text-slate-500">
-            {title}
-          </p>
+      <p className="mt-3 text-3xl font-bold text-slate-900">
+        {value}
+      </p>
 
-          <p className="mt-3 text-3xl font-black tracking-tight text-slate-950">
-            {value}
-          </p>
-
-          <p className="mt-2 text-xs text-slate-500">
-            {description}
-          </p>
-        </div>
-
-        <span
-          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${
-            tone === "green"
-              ? "bg-green-50 text-green-700"
-              : tone === "red"
-                ? "bg-red-50 text-red-700"
-                : tone === "amber"
-                  ? "bg-amber-50 text-amber-700"
-                  : "bg-[#FFF1F2] text-[#8F1024]"
-          }`}
-        >
-          <SummaryIcon tone={tone} />
-        </span>
-      </div>
+      <p className="mt-2 text-sm text-slate-500">
+        {description}
+      </p>
     </article>
-  );
-}
-
-function SummaryIcon({ tone }) {
-  const className = "h-5 w-5";
-
-  if (tone === "green") {
-    return (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
-        <path d="m5 12 4 4L19 6" />
-      </svg>
-    );
-  }
-
-  if (tone === "red") {
-    return (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
-        <path d="M12 9v4" />
-        <path d="M12 17h.01" />
-        <path d="M10.3 3.6 2.4 17.3A2 2 0 0 0 4.1 20h15.8a2 2 0 0 0 1.7-2.7L13.7 3.6a2 2 0 0 0-3.4 0Z" />
-      </svg>
-    );
-  }
-
-  if (tone === "amber") {
-    return (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
-        <circle cx="12" cy="12" r="9" />
-        <path d="M12 7v5l3 2" />
-      </svg>
-    );
-  }
-
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
-      <path d="M4 19V9" />
-      <path d="M10 19V5" />
-      <path d="M16 19v-7" />
-      <path d="M22 19V3" />
-    </svg>
-  );
-}
-
-function RefreshIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="h-4 w-4"
-      aria-hidden="true"
-    >
-      <path d="M20 6v6h-6" />
-      <path d="M4 18v-6h6" />
-      <path d="M5.5 9A7 7 0 0 1 17 5l3 3" />
-      <path d="m4 16 3 3a7 7 0 0 0 11.5-4" />
-    </svg>
   );
 }
 
@@ -2227,7 +2078,7 @@ function StatusBadge({ status }) {
     <span
       className={`inline-flex whitespace-nowrap rounded-full border px-3 py-1 text-xs font-semibold ${
         styles[status] ??
-        "border-[#8F1024]/15 bg-slate-50 text-slate-600"
+        "border-slate-200 bg-slate-50 text-slate-600"
       }`}
     >
       {getStatusLabel(status)}

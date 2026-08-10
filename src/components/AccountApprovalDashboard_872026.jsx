@@ -1,7 +1,6 @@
 import {
   useCallback,
   useEffect,
-  useMemo,
   useState,
 } from "react";
 import { supabase } from "../lib/supabase";
@@ -18,8 +17,6 @@ function AccountApprovalDashboard({
   const [message, setMessage] =
     useState("");
   const [messageType, setMessageType] =
-    useState("");
-  const [searchText, setSearchText] =
     useState("");
 
   const [rejectAccount, setRejectAccount] =
@@ -198,42 +195,17 @@ function AccountApprovalDashboard({
     }
   }
 
-  const filteredAccounts = useMemo(() => {
-    const keyword =
-      searchText.trim().toLowerCase();
-
-    if (!keyword) {
-      return accounts;
-    }
-
-    return accounts.filter((account) =>
-      [
-        account.nama_lengkap,
-        account.email,
-        account.nidn_nip,
-        account.program_studi,
-      ]
-        .filter(Boolean)
-        .join(" ")
-        .toLowerCase()
-        .includes(keyword),
-    );
-  }, [accounts, searchText]);
-
   return (
     <section className="space-y-5">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#8F1024]">
-            Administrasi Akun
-          </p>
-
-          <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-950 md:text-3xl">
+          <h2 className="text-2xl font-bold text-slate-900">
             Persetujuan Akun Dosen
           </h2>
 
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
-            Periksa identitas pendaftar sebelum memberikan akses ke SIMETRI.
+          <p className="mt-1 text-slate-600">
+            Periksa pendaftaran dosen sebelum
+            akun diaktifkan.
           </p>
         </div>
 
@@ -241,46 +213,12 @@ function AccountApprovalDashboard({
           type="button"
           onClick={loadAccounts}
           disabled={loading}
-          className="inline-flex items-center gap-2 self-start rounded-xl border border-[#8F1024]/15 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-rose-200 hover:bg-rose-50 hover:text-[#8F1024] disabled:opacity-50 lg:self-auto"
+          className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 disabled:opacity-50"
         >
-          <RefreshIcon />
-          {loading ? "Memuat..." : "Perbarui data"}
+          {loading
+            ? "Memuat..."
+            : "Perbarui data"}
         </button>
-      </div>
-
-      <div className="grid gap-3 sm:grid-cols-2">
-        <article className="relative overflow-hidden rounded-2xl border border-[#8F1024]/15 bg-gradient-to-br from-[#FFF7F7] to-white p-5 shadow-sm">
-          <div className="absolute inset-x-0 top-0 h-0.5 bg-amber-500" />
-          <p className="text-sm font-semibold text-slate-500">
-            Menunggu Persetujuan
-          </p>
-          <p className="mt-2 text-3xl font-black text-slate-950">
-            {loading ? "..." : accounts.length}
-          </p>
-          <p className="mt-1 text-xs text-slate-500">
-            Akun dosen belum aktif
-          </p>
-        </article>
-
-        <div className="rounded-2xl border border-[#8F1024]/15 bg-gradient-to-br from-[#FFF7F7] to-white p-4 shadow-sm">
-          <label
-            htmlFor="approval-search"
-            className="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500"
-          >
-            Cari pendaftar
-          </label>
-
-          <input
-            id="approval-search"
-            type="search"
-            value={searchText}
-            onChange={(event) =>
-              setSearchText(event.target.value)
-            }
-            placeholder="Nama, email, atau NIDN/NIP..."
-            className="w-full rounded-xl border border-[#8F1024]/15 bg-[#FFF6F7] px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-[#9F1239] focus:bg-white focus:ring-4 focus:ring-rose-100"
-          />
-        </div>
       </div>
 
       {message && (
@@ -295,11 +233,11 @@ function AccountApprovalDashboard({
         </div>
       )}
 
-      <div className="overflow-hidden rounded-3xl border border-[#8F1024]/15 bg-white shadow-sm">
+      <div className="overflow-hidden rounded-2xl bg-white shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[980px] border-collapse">
             <thead className="bg-slate-50">
-              <tr className="border-b border-[#8F1024]/15 text-left">
+              <tr className="border-b border-slate-200 text-left">
                 <Heading>No</Heading>
                 <Heading>Nama</Heading>
                 <Heading>Email</Heading>
@@ -319,11 +257,11 @@ function AccountApprovalDashboard({
             </thead>
 
             <tbody>
-              {filteredAccounts.map(
+              {accounts.map(
                 (account, index) => (
                   <tr
                     key={account.user_id}
-                    className="border-b border-slate-100 transition hover:bg-[#FFF6F7]"
+                    className="border-b border-slate-100"
                   >
                     <Cell>
                       {index + 1}
@@ -366,7 +304,7 @@ function AccountApprovalDashboard({
                             processingId ===
                             account.user_id
                           }
-                          className="rounded-xl border border-red-200 bg-red-50 px-4 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-100 disabled:opacity-50"
+                          className="rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-700 disabled:opacity-50"
                         >
                           Tolak
                         </button>
@@ -382,7 +320,7 @@ function AccountApprovalDashboard({
                             processingId ===
                             account.user_id
                           }
-                          className="rounded-xl bg-green-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-green-700 disabled:opacity-50"
+                          className="rounded-lg bg-green-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-green-700 disabled:opacity-50"
                         >
                           {processingId ===
                           account.user_id
@@ -396,7 +334,7 @@ function AccountApprovalDashboard({
               )}
 
               {!loading &&
-                filteredAccounts.length === 0 && (
+                accounts.length === 0 && (
                   <tr>
                     <td
                       colSpan="7"
@@ -492,26 +430,6 @@ function AccountApprovalDashboard({
         </div>
       )}
     </section>
-  );
-}
-
-function RefreshIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="h-4 w-4"
-      aria-hidden="true"
-    >
-      <path d="M20 6v6h-6" />
-      <path d="M4 18v-6h6" />
-      <path d="M5.5 9A7 7 0 0 1 17 5l3 3" />
-      <path d="m4 16 3 3a7 7 0 0 0 11.5-4" />
-    </svg>
   );
 }
 
