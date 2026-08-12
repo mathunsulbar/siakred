@@ -3,6 +3,7 @@ import { supabase } from "./lib/supabase";
 import GpmWorkspace from "./components/GpmWorkspace";
 import DosenWorkspace from "./components/DosenWorkspace";
 import SatgasDashboard from "./components/SatgasDashboard";
+import PublicMonitoringDashboard from "./components/PublicMonitoringDashboard";
 
 function App() {
   const [session, setSession] = useState(null);
@@ -15,6 +16,10 @@ function App() {
   const [message, setMessage] = useState("");
 
   const [authMode, setAuthMode] = useState("login");
+  const [
+    showPublicMonitoring,
+    setShowPublicMonitoring,
+  ] = useState(false);
   const [registerForm, setRegisterForm] = useState({
     nama_lengkap: "",
     email: "",
@@ -325,6 +330,7 @@ function App() {
 
   async function handleLogout() {
     setMessage("");
+    setShowPublicMonitoring(false);
 
     const { error } = await supabase.auth.signOut({
       scope: "local",
@@ -384,6 +390,23 @@ function App() {
           </p>
         </div>
       </main>
+    );
+  }
+
+  if (
+    !session &&
+    showPublicMonitoring
+  ) {
+    return (
+      <PublicMonitoringDashboard
+        onLogin={() => {
+          setShowPublicMonitoring(false);
+          setAuthMode("login");
+          setMessage("");
+          setRegisterMessage("");
+          setRegisterMessageType("");
+        }}
+      />
     );
   }
 
@@ -539,6 +562,40 @@ function App() {
                         : "Masuk ke SIMETRI"}
                     </button>
                   </form>
+
+                  <div className="my-5 flex items-center gap-3">
+                    <div className="h-px flex-1 bg-slate-200" />
+                    <span className="text-xs font-medium text-slate-400">
+                      atau
+                    </span>
+                    <div className="h-px flex-1 bg-slate-200" />
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setShowPublicMonitoring(true)
+                    }
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-[#881337]/25 bg-[#FFF1F2] px-5 py-3 font-semibold text-[#881337] transition hover:border-[#881337]/40 hover:bg-rose-100"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="h-4 w-4"
+                      aria-hidden="true"
+                    >
+                      <path d="M4 19V9" />
+                      <path d="M10 19V5" />
+                      <path d="M16 19v-7" />
+                      <path d="M22 19V3" />
+                    </svg>
+
+                    Lihat Data Monitoring
+                  </button>
 
                   <div className="mt-6 border-t border-slate-200 pt-6 text-center">
                     <p className="text-sm text-slate-600">
